@@ -1,0 +1,667 @@
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en" class="h-100" data-bs-theme="auto">
+<head>
+    <script src="/assets/js/color-modes.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MangaComic</title>
+    <!-- CSS Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/language-flags.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="/css/color-modes.css">
+    <!-- PURE-CSS từ Github -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="/css/for-index.css">
+    <link rel="stylesheet" href="/css/index-styles.css">
+
+    <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom styles for this template -->
+    <link href="/css/sticky-footer.css" rel="stylesheet">
+    <style>
+        /* ... existing code ... */
+        
+        /* Layout CSS */
+        html, body {
+            height: 100%;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sb-nav-fixed {
+            padding-top: 56px;
+        }
+        
+        .sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
+            width: 225px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 56px;
+            z-index: 1038;
+        }
+        
+        .sb-nav-fixed #layoutSidenav #layoutSidenav_content {
+            padding-left: 225px;
+            padding-top: 1rem;
+            top: 56px;
+        }
+        
+        /* Top navbar */
+        .sb-topnav {
+            height: 56px;
+            z-index: 1039;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            padding: 0;
+        }
+        
+        /* Sidenav */
+        #layoutSidenav {
+            display: flex;
+            flex: 1;
+        }
+        
+        #layoutSidenav_nav {
+            flex-basis: 225px;
+            flex-shrink: 0;
+            transition: transform 0.15s ease-in-out;
+            z-index: 1038;
+            transform: translateX(0);
+        }
+        
+        #layoutSidenav_content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 0;
+            flex-grow: 1;
+            min-height: calc(100vh - 56px);
+            margin-left: 0;
+            transition: margin 0.15s ease-in-out;
+        }
+        
+        .sb-sidenav-toggled #layoutSidenav_nav {
+            transform: translateX(-225px);
+        }
+        
+        .sb-sidenav-toggled #layoutSidenav_content {
+            margin-left: -225px;
+        }
+        
+        @media (max-width: 767.98px) {
+            #layoutSidenav_nav {
+                transform: translateX(-225px);
+            }
+            
+            #layoutSidenav_content {
+                margin-left: -225px;
+            }
+            
+            .sb-sidenav-toggled #layoutSidenav_nav {
+                transform: translateX(0);
+            }
+            
+            .sb-sidenav-toggled #layoutSidenav_content {
+                margin-left: 0;
+            }
+        }
+        
+        /* Sidenav menu styling */
+        .sb-sidenav {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            flex-wrap: nowrap;
+        }
+        
+        .sb-sidenav .sb-sidenav-menu {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav {
+            flex-direction: column;
+            flex-wrap: nowrap;
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav .sb-sidenav-menu-heading {
+            padding: 1.75rem 1rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            transition: color 0.15s ease;
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav .nav-link:hover {
+            color: #fff;
+            padding-left: 1.25rem;
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav .nav-link.active {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-nav-link-icon {
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            width: 1.5rem;
+            text-align: center;
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-sidenav-collapse-arrow {
+            display: inline-block;
+            margin-left: auto;
+            transition: transform 0.15s ease;
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav .nav-link.collapsed .sb-sidenav-collapse-arrow {
+            transform: rotate(-90deg);
+        }
+        
+        .sb-sidenav .sb-sidenav-menu .nav .sb-sidenav-menu-nested {
+            margin-left: 1.5rem;
+            flex-direction: column;
+        }
+        
+        .sb-sidenav .sb-sidenav-footer {
+            padding: 0.75rem;
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Color schemes */
+        .sb-sidenav-dark {
+            background-color: #212529;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .sb-sidenav-dark .sb-sidenav-menu .sb-sidenav-menu-heading {
+            color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .sb-sidenav-dark .sb-sidenav-menu .nav-link {
+            color: rgba(255, 255, 255, 0.65);
+        }
+        
+        .sb-sidenav-dark .sb-sidenav-menu .nav-link:hover {
+            color: #fff;
+        }
+        
+        .sb-sidenav-dark .sb-sidenav-menu .nav-link.active {
+            color: #fff;
+        }
+        
+        .sb-sidenav-dark .sb-sidenav-footer {
+            background-color: #343a40;
+        }
+        
+        /* Content area styling */
+        .content-wrapper {
+            padding: 1.5rem;
+            min-height: calc(100vh - 56px);
+        }
+        
+        #comicList {
+            margin-top: 1rem;
+        }
+        
+        /* Grid layout */
+        .row-cols-md-6 > * {
+            flex: 0 0 auto;
+            width: 16.666667% !important; /* Force 6 columns */
+        }
+
+        @media (max-width: 767.98px) {
+            .row-cols-md-6 > * {
+                width: 33.333333% !important; /* 3 columns on tablet */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .row-cols-md-6 > * {
+                width: 50% !important; /* 2 columns on mobile */
+            }
+        }
+        
+        /* Card styling */
+        .card {
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s;
+            height: 450px;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: #000;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .card-img-top {
+            height: 390px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 0.5rem;
+            height: 60px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .card-text {
+            font-size: 0.8rem;
+            margin-bottom: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            color: rgba(255, 255, 255, 0.7);
+            flex-grow: 1;
+            line-height: 1.2;
+        }
+        
+        /* Footer positioning */
+        .footer {
+            margin-top: auto;
+            background-color: #f8f9fa;
+        }
+        
+        /* Ensure content doesn't overlap with navbar */
+        #layoutSidenav_content {
+            margin-top: 0;
+        }
+        
+        /* Pagination positioning */
+        .pagination-container {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Spacing */
+        .col {
+            padding: 0.5rem;
+        }
+
+        /* Container */
+        .container-fluid {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Limit to 12 cards (2 rows x 6 columns) */
+        #cardContainer .col:nth-child(n+13) {
+            display: none;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column h-100 sb-nav-fixed">
+    <!-- Toast thông báo khi báo cáo thành công -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="reportSuccessToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <strong class="me-auto">Thông báo</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Báo cáo sự cố đã được gửi thành công. Chúng tôi sẽ xem xét và phản hồi sớm nhất!
+            </div>
+        </div>
+    </div>
+
+    <!-- Top navigation -->
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="#">MANGA COMIC</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+            <i class="bi bi-list"></i>
+        </button>
+        
+        <!-- Spacer to push user elements to the right -->
+        <div class="d-flex align-items-center ms-auto">
+            <!-- Navbar Search -->
+            <form class="d-flex me-3" role="search">
+                <input class="form-control me-2" type="search" placeholder="Tìm kiếm..." aria-label="Search" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
+                <button class="btn btn-success" type="submit" style="width: 70px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </button>
+            </form>
+
+            <!-- User Dropdown -->
+            <ul class="navbar-nav mb-0 me-3">
+                <li class="nav-item dropdown ms-5">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                        </svg>
+                        Tài khoản
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#login">Đăng nhập</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logup">Đăng ký</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Sidenav and Content wrapper -->
+    <div id="layoutSidenav">
+        <!-- Side Navigation -->
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">MENU</div>
+                        <a class="nav-link active" href=".">
+                            <div class="sb-nav-link-icon"><i class="bi bi-house-door"></i></div>
+                            Trang chủ
+                        </a>
+                        
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGenres" aria-expanded="false" aria-controls="collapseGenres">
+                            <div class="sb-nav-link-icon"><i class="bi bi-tags"></i></div>
+                            Thể loại
+                            <div class="sb-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseGenres" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav" id="genreDropdownMenu">
+                                <!-- Danh sách thể loại sẽ được đổ động bằng JavaScript -->
+                            </nav>
+                        </div>
+                        
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRankings" aria-expanded="false" aria-controls="collapseRankings">
+                            <div class="sb-nav-link-icon"><i class="bi bi-trophy"></i></div>
+                            Bảng xếp hạng
+                            <div class="sb-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseRankings" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="#" data-ranking-type="most-read" data-bs-toggle="modal" data-bs-target="#rankingModal">
+                                    <div class="sb-nav-link-icon"><i class="bi bi-eye"></i></div>
+                                    Đọc nhiều nhất
+                                </a>
+                                <a class="nav-link" href="#" data-ranking-type="most-liked" data-bs-toggle="modal" data-bs-target="#rankingModal">
+                                    <div class="sb-nav-link-icon"><i class="bi bi-heart"></i></div>
+                                    Yêu thích nhất
+                                </a>
+                                <a class="nav-link" href="#" data-ranking-type="highest-rated" data-bs-toggle="modal" data-bs-target="#rankingModal">
+                                    <div class="sb-nav-link-icon"><i class="bi bi-star"></i></div>
+                                    Đánh giá cao nhất
+                                </a>
+                                <a class="nav-link" href="#" data-ranking-type="weekly-top" data-bs-toggle="modal" data-bs-target="#rankingModal">
+                                    <div class="sb-nav-link-icon"><i class="bi bi-calendar-week"></i></div>
+                                    Top xem tuần
+                                </a>
+                                <a class="nav-link" href="#" data-ranking-type="daily-top" data-bs-toggle="modal" data-bs-target="#rankingModal">
+                                    <div class="sb-nav-link-icon"><i class="bi bi-calendar-day"></i></div>
+                                    Top xem ngày
+                                </a>
+                            </nav>
+                        </div>
+                        
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#historyModal">
+                            <div class="sb-nav-link-icon"><i class="bi bi-clock-history"></i></div>
+                            Lịch sử đọc truyện
+                        </a>
+                        
+                        <div class="sb-sidenav-menu-heading">CÀI ĐẶT</div>
+                        
+                        <a class="nav-link d-flex align-items-center" href="#" id="sidebar-theme-toggle">
+                            <div class="sb-nav-link-icon">
+                                <i class="bi bi-sun-fill" id="sidebar-light-icon" style="display: none;"></i>
+                                <i class="bi bi-moon-stars-fill" id="sidebar-dark-icon"></i>
+                            </div>
+                            Chế độ sáng/tối
+                        </a>
+                        
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLanguages" aria-expanded="false" aria-controls="collapseLanguages">
+                            <div class="sb-nav-link-icon"><i class="bi bi-globe"></i></div>
+                            Ngôn ngữ
+                            <div class="sb-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLanguages" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link language-option" href="#" data-lang="vi">
+                                    <div class="sb-nav-link-icon"><span class="flag-icon flag-icon-vi"></span></div>
+                                    Tiếng Việt
+                                </a>
+                                <a class="nav-link language-option" href="#" data-lang="en">
+                                    <div class="sb-nav-link-icon"><span class="flag-icon flag-icon-en"></span></div>
+                                    English
+                                </a>
+                                <a class="nav-link language-option" href="#" data-lang="zh">
+                                    <div class="sb-nav-link-icon"><span class="flag-icon flag-icon-zh"></span></div>
+                                    中文
+                                </a>
+                            </nav>
+                        </div>
+                        
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#reportIssueModal">
+                            <div class="sb-nav-link-icon"><i class="bi bi-exclamation-triangle"></i></div>
+                            Báo cáo sự cố
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Content -->
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <div class="row row-cols-1 row-cols-md-6 g-4" id="cardContainer">
+                        <!-- Comic cards will be populated here -->
+                    </div>
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <div class="d-flex justify-content-center" id="paginationContainer">
+                            <ul class="pagination pagination-lg">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Previous</a>
+                                </li>
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </main>
+            <footer class="py-4 bg-dark text-white mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <h5 class="text-uppercase mb-3">MANGA COMIC</h5>
+                            <p class="small">Website đọc truyện tranh online với nhiều thể loại đa dạng, cập nhật liên tục. Mang đến trải nghiệm tốt nhất cho người dùng.</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h5 class="text-uppercase mb-3">Liên Kết</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-white-50 text-decoration-none">Điều khoản sử dụng</a></li>
+                                <li><a href="#" class="text-white-50 text-decoration-none">Chính sách bảo mật</a></li>
+                                <li><a href="#" class="text-white-50 text-decoration-none">Về chúng tôi</a></li>
+                                <li><a href="#" class="text-white-50 text-decoration-none">Liên hệ</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h5 class="text-uppercase mb-3">Kết Nối</h5>
+                            <div class="d-flex gap-3">
+                                <a href="#" class="text-white"><i class="bi bi-facebook fs-4"></i></a>
+                                <a href="#" class="text-white"><i class="bi bi-twitter fs-4"></i></a>
+                                <a href="#" class="text-white"><i class="bi bi-instagram fs-4"></i></a>
+                                <a href="#" class="text-white"><i class="bi bi-discord fs-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-3 bg-secondary">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 small">
+                            Copyright &copy; MangaComic 2024. All rights reserved.
+                        </div>
+                        <div class="col-md-6 text-md-end small">
+                            <a href="#" class="text-white-50 text-decoration-none me-3">Privacy Policy</a>
+                            <a href="#" class="text-white-50 text-decoration-none">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="/js/index/auth.js"></script>
+    <script src="/js/index/notifications.js"></script>
+    <script src="/js/index/theme-toggle.js"></script>
+    <script src="/js/index/language-switcher.js"></script>
+    <script src="/js/index/rankings.js"></script>
+    <script src="/js/index/gioithieu.js"></script>
+    <script src="/js/index/card_title.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Sidebar Toggle Functionality
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                });
+            }
+            
+            // Check for previous sidebar state
+            if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+                document.body.classList.add('sb-sidenav-toggled');
+            }
+            
+            // Mobile responsive handling
+            function handleResponsive() {
+                if (window.innerWidth < 768) {
+                    document.body.classList.add('sb-sidenav-toggled');
+                } else {
+                    if (localStorage.getItem('sb|sidebar-toggle') !== 'true') {
+                        document.body.classList.remove('sb-sidenav-toggled');
+                    }
+                }
+            }
+            
+            // Initialize responsive state
+            handleResponsive();
+            
+            // Listen for window resize
+            window.addEventListener('resize', handleResponsive);
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                const isSmallScreen = window.innerWidth < 768;
+                const isClickOutsideSidebar = !event.target.closest('#layoutSidenav_nav');
+                const isClickToggleButton = event.target.closest('#sidebarToggle');
+                const isSidebarVisible = !document.body.classList.contains('sb-sidenav-toggled');
+                
+                if (isSmallScreen && isClickOutsideSidebar && !isClickToggleButton && isSidebarVisible) {
+                    document.body.classList.add('sb-sidenav-toggled');
+                }
+            });
+
+            // Đảm bảo các modal hoạt động đúng với sidebar
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.addEventListener('shown.bs.modal', function() {
+                    if (window.innerWidth < 768) {
+                        document.body.classList.add('sb-sidenav-toggled');
+                    }
+                });
+            });
+
+            // Đồng bộ theme toggle giữa sidebar và navbar
+            const sidebarThemeToggle = document.getElementById('sidebar-theme-toggle');
+            const sidebarLightIcon = document.getElementById('sidebar-light-icon');
+            const sidebarDarkIcon = document.getElementById('sidebar-dark-icon');
+            
+            if (sidebarThemeToggle && sidebarLightIcon && sidebarDarkIcon) {
+                sidebarThemeToggle.addEventListener('click', function() {
+                    const htmlElement = document.documentElement;
+                    const currentTheme = htmlElement.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    htmlElement.setAttribute('data-bs-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    
+                    if (newTheme === 'dark') {
+                        sidebarLightIcon.style.display = 'none';
+                        sidebarDarkIcon.style.display = 'inline-block';
+                    } else {
+                        sidebarLightIcon.style.display = 'inline-block';
+                        sidebarDarkIcon.style.display = 'none';
+                    }
+                });
+                
+                // Đồng bộ trạng thái icon khi tải trang
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                if (currentTheme === 'dark') {
+                    sidebarLightIcon.style.display = 'none';
+                    sidebarDarkIcon.style.display = 'inline-block';
+                } else {
+                    sidebarLightIcon.style.display = 'inline-block';
+                    sidebarDarkIcon.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

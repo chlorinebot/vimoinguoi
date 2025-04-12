@@ -1,0 +1,25 @@
+/* Flag icons - Base64 encoded to avoid additional HTTP requests */
+
+.flag-icon {
+    display: inline-block;
+    width: 24px;
+    height: 16px;
+    background-size: cover;
+    background-position: center;
+    margin-right: 5px;
+}
+
+/* Vietnamese flag */
+.flag-icon-vi {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1280px-Flag_of_Vietnam.svg.png');
+}
+
+/* English flag */
+.flag-icon-en {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/1920px-Flag_of_the_United_Kingdom_%281-2%29.svg.png');
+}
+
+/* Chinese flag */
+.flag-icon-zh {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/1280px-Flag_of_the_People%27s_Republic_of_China.svg.png');
+} 
