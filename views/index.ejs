@@ -6,7 +6,9 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MangaComic</title>
+    <title>Trang chủ</title>
+    <!-- Thêm SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- CSS Bootstrap -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -17,12 +19,142 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     
     <link rel="stylesheet" href="/css/for-index.css">
-    <link rel="stylesheet" href="/css/index-styles.css">
 
     <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Custom styles for this template -->
+    
+      <!-- Custom styles for this template -->
     <link href="/css/sticky-footer.css" rel="stylesheet">
+    <style>
+        .bd-placeholder-img {
+          font-size: 1.125rem;
+          text-anchor: middle;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          user-select: none;
+        }
+        
+        /* CSS cho dropdown thông báo */
+        .notification-dropdown {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .notification-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        .notification-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .notification-item.unread {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+
+        .notification-item .notification-time {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+
+        .notification-item .notification-content {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-item .notification-meta {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+        
+        /* Hiệu ứng khi có thông báo mới */
+        @keyframes bellShake {
+            0% { transform: rotate(0); }
+            15% { transform: rotate(5deg); }
+            30% { transform: rotate(-5deg); }
+            45% { transform: rotate(4deg); }
+            60% { transform: rotate(-4deg); }
+            75% { transform: rotate(2deg); }
+            85% { transform: rotate(-2deg); }
+            92% { transform: rotate(1deg); }
+            100% { transform: rotate(0); }
+        }
+
+        .bell-shake {
+            animation: bellShake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        
+        @media (min-width: 768px) {
+          .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+          }
+        }
+  
+        .b-example-divider {
+          width: 100%;
+          height: 3rem;
+          background-color: rgba(0, 0, 0, .1);
+          border: solid rgba(0, 0, 0, .15);
+          border-width: 1px 0;
+          box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+  
+        .b-example-vr {
+          flex-shrink: 0;
+          width: 1.5rem;
+          height: 100vh;
+        }
+  
+        .bi {
+          vertical-align: -.125em;
+          fill: currentColor;
+        }
+  
+        .nav-scroller {
+          position: relative;
+          z-index: 2;
+          height: 2.75rem;
+          overflow-y: hidden;
+        }
+  
+        .nav-scroller .nav {
+          display: flex;
+          flex-wrap: nowrap;
+          padding-bottom: 1rem;
+          margin-top: -1px;
+          overflow-x: auto;
+          text-align: center;
+          white-space: nowrap;
+          -webkit-overflow-scrolling: touch;
+        }
+  
+        .btn-bd-primary {
+          --bd-violet-bg: #712cf9;
+          --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+  
+          --bs-btn-font-weight: 600;
+          --bs-btn-color: var(--bs-white);
+          --bs-btn-bg: var(--bd-violet-bg);
+          --bs-btn-border-color: var(--bd-violet-bg);
+          --bs-btn-hover-color: var(--bs-white);
+          --bs-btn-hover-bg: #6528e0;
+          --bs-btn-hover-border-color: #6528e0;
+          --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+          --bs-btn-active-color: var(--bs-btn-hover-color);
+          --bs-btn-active-bg: #5a23c8;
+          --bs-btn-active-border-color: #5a23c8;
+        }
+  
+        .bd-mode-toggle {
+          z-index: 1500;
+        }
+  
+        .bd-mode-toggle .dropdown-menu .active .bi {
+          display: block !important;
+        }
+    </style>
+
     <style>
         /* ... existing code ... */
         
@@ -244,67 +376,7 @@
             }
         }
         
-        /* Card styling */
-        .card {
-            margin-bottom: 1.5rem;
-            transition: transform 0.2s;
-            height: 450px;
-            border: 1px solid rgba(0, 0, 0, 0.125);
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            background: #000;
-        }
         
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .card-img-top {
-            height: 390px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .card:hover .card-img-top {
-            transform: scale(1.05);
-        }
-
-        .card-body {
-            padding: 0.5rem;
-            height: 60px;
-            overflow: hidden;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-
-        .card-title {
-            font-size: 0.9rem;
-            margin-bottom: 0.15rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: #fff;
-            font-weight: 500;
-        }
-
-        .card-text {
-            font-size: 0.8rem;
-            margin-bottom: 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            color: rgba(255, 255, 255, 0.7);
-            flex-grow: 1;
-            line-height: 1.2;
-        }
         
         /* Footer positioning */
         .footer {
@@ -355,47 +427,6 @@
         </div>
     </div>
 
-    <!-- Top navigation -->
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="#">MANGA COMIC</a>
-        <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
-            <i class="bi bi-list"></i>
-        </button>
-        
-        <!-- Spacer to push user elements to the right -->
-        <div class="d-flex align-items-center ms-auto">
-            <!-- Navbar Search -->
-            <form class="d-flex me-3" role="search">
-                <input class="form-control me-2" type="search" placeholder="Tìm kiếm..." aria-label="Search" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
-                <button class="btn btn-success" type="submit" style="width: 70px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                    </svg>
-                </button>
-            </form>
-
-            <!-- User Dropdown -->
-            <ul class="navbar-nav mb-0 me-3">
-                <li class="nav-item dropdown ms-5">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                        </svg>
-                        Tài khoản
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#login">Đăng nhập</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logup">Đăng ký</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    
     <!-- Sidenav and Content wrapper -->
     <div id="layoutSidenav">
         <!-- Side Navigation -->
@@ -409,15 +440,24 @@
                             Trang chủ
                         </a>
                         
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGenres" aria-expanded="false" aria-controls="collapseGenres">
+                        <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#genresOffcanvas">
                             <div class="sb-nav-link-icon"><i class="bi bi-tags"></i></div>
                             Thể loại
-                            <div class="sb-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseGenres" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav" id="genreDropdownMenu">
-                                <!-- Danh sách thể loại sẽ được đổ động bằng JavaScript -->
-                            </nav>
+
+                        <!-- Offcanvas Thể loại -->
+                        <div class="offcanvas offcanvas-start" tabindex="-1" id="genresOffcanvas" aria-labelledby="genresOffcanvasLabel">
+                            <div class="offcanvas-header bg-dark text-white">
+                                <h5 class="offcanvas-title" id="genresOffcanvasLabel">
+                                    <i class="bi bi-tags me-2"></i>Thể loại
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <div class="list-group list-group-flush" id="genreList">
+                                    <!-- Danh sách thể loại sẽ được thêm vào đây bằng JavaScript -->
+                                </div>
+                            </div>
                         </div>
                         
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRankings" aria-expanded="false" aria-controls="collapseRankings">
@@ -450,20 +490,13 @@
                             </nav>
                         </div>
                         
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#historyModal">
+                        <a class="nav-link" id="sidebarHistoryLink" href="#" data-bs-toggle="modal" data-bs-target="#userProfileModal" data-show-tab="history-tab">
                             <div class="sb-nav-link-icon"><i class="bi bi-clock-history"></i></div>
                             Lịch sử đọc truyện
                         </a>
                         
                         <div class="sb-sidenav-menu-heading">CÀI ĐẶT</div>
                         
-                        <a class="nav-link d-flex align-items-center" href="#" id="sidebar-theme-toggle">
-                            <div class="sb-nav-link-icon">
-                                <i class="bi bi-sun-fill" id="sidebar-light-icon" style="display: none;"></i>
-                                <i class="bi bi-moon-stars-fill" id="sidebar-dark-icon"></i>
-                            </div>
-                            Chế độ sáng/tối
-                        </a>
                         
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLanguages" aria-expanded="false" aria-controls="collapseLanguages">
                             <div class="sb-nav-link-icon"><i class="bi bi-globe"></i></div>
@@ -495,34 +528,33 @@
                 </div>
             </nav>
         </div>
-        
-        <!-- Content -->
         <div id="layoutSidenav_content">
+            <!--Hiện thị các card truyện-->
             <main>
                 <div class="container-fluid px-4">
                     <div class="row row-cols-1 row-cols-md-6 g-4" id="cardContainer">
                         <!-- Comic cards will be populated here -->
-                    </div>
+            </div>
                     <nav aria-label="Page navigation" class="mt-4">
                         <div class="d-flex justify-content-center" id="paginationContainer">
                             <ul class="pagination pagination-lg">
                                 <li class="page-item disabled">
                                     <a class="page-link" href="#">Previous</a>
-                                </li>
+                </li>
                                 <li class="page-item active" aria-current="page">
                                     <a class="page-link" href="#">1</a>
-                                </li>
+                </li>
                                 <li class="page-item">
                                     <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
+                </li>
+              </ul>
                         </div>
                     </nav>
-                </div>
+                      </div>
             </main>
             <footer class="py-4 bg-dark text-white mt-auto">
                 <div class="container-fluid px-4">
-                    <div class="row">
+                  <div class="row">
                         <div class="col-md-4 mb-3">
                             <h5 class="text-uppercase mb-3">MANGA COMIC</h5>
                             <p class="small">Website đọc truyện tranh online với nhiều thể loại đa dạng, cập nhật liên tục. Mang đến trải nghiệm tốt nhất cho người dùng.</p>
@@ -543,125 +575,1357 @@
                                 <a href="#" class="text-white"><i class="bi bi-twitter fs-4"></i></a>
                                 <a href="#" class="text-white"><i class="bi bi-instagram fs-4"></i></a>
                                 <a href="#" class="text-white"><i class="bi bi-discord fs-4"></i></a>
-                            </div>
                         </div>
-                    </div>
+                        </div>
+                      </div>
                     <hr class="my-3 bg-secondary">
                     <div class="row align-items-center">
                         <div class="col-md-6 small">
                             Copyright &copy; MangaComic 2024. All rights reserved.
-                        </div>
+                    </div>
                         <div class="col-md-6 text-md-end small">
                             <a href="#" class="text-white-50 text-decoration-none me-3">Privacy Policy</a>
                             <a href="#" class="text-white-50 text-decoration-none">Terms &amp; Conditions</a>
+                  </div>
+                </div>
+                        </div>
+            </footer>
+        </div>
+
+        
+        
+
+
+        
+    <!-- Offcanvas nơi hiển thị sau tìm kiếm -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">Bạn đang tìm kiếm: </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="..." class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Chưa có dữ liệu</p>
+                            <p class="card-text"><small class="text-body-secondary">Chưa có dữ liệu</small></p>
                         </div>
                     </div>
                 </div>
-            </footer>
+            </div>
         </div>
     </div>
+    <!-- Modal đăng nhập -->
+    <div class="modal fade" id="login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Đăng nhập</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginUsername" class="form-label">Tên người dùng</label>
+                            <input type="text" class="form-control" id="loginUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Lưu lại mật khẩu</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                        <span class="pure-form-message-inline ms-2">Nếu bạn đăng nhập thì đã đồng ý các <a href="#" data-bs-toggle="modal" data-bs-target="#dieukhoandv">điều khoản dịch vụ</a> & <a href="#" data-bs-toggle="modal" data-bs-target="#quyenriengtu">quyền riêng tư</a> của chúng tôi!</span>
+                        <div id="loginMessage" class="mt-2 text-danger"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#logup">Chưa có tài khoản?</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal đăng ký -->
+    <div class="modal fade" id="logup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Đăng ký người dùng mới</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm" class="pure-form pure-form-aligned">
+                        <fieldset>
+                            <div class="pure-control-group mb-4">
+                                <label for="registerUsername" class="form-label">Tên người dùng</label>
+                                <input id="registerUsername" type="text" placeholder="Tên người dùng" required class="form-control" data-check-exists="true">
+                                <span class="pure-form-message-inline">Chỉ chấp nhận chữ thường và số, tối đa 15 ký tự.</span>
+                                <div class="error-message text-danger"></div>
+                            </div>
+                            <div class="pure-control-group mb-4">
+                                <label for="registerPassword" class="form-label">Mật khẩu</label>
+                                <input id="registerPassword" type="password" placeholder="Mật khẩu" required class="form-control">
+                                <label class="ms-3 pure-checkbox">
+                                    <input id="showPassword" type="checkbox"> Hiển thị mật khẩu
+                                </label>
+                                <span class="pure-form-message-inline">Độ dài 8-20, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</span>
+                                <div class="error-message text-danger"></div>
+                            </div>
+                            <div class="pure-control-group mb-4">
+                                <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                                <input id="confirmPassword" type="password" placeholder="Xác nhận mật khẩu" required class="form-control">
+                                <div class="error-message text-danger"></div>
+                            </div>
+                            <div class="pure-control-group mb-4">
+                                <label for="registerEmail" class="form-label">Email</label>
+                                <input id="registerEmail" type="email" placeholder="Email Address" required class="form-control" data-check-exists="true">
+                                <span class="pure-form-message-inline">Chúng tôi sẽ không chia sẻ email của bạn.</span>
+                                <div class="error-message text-danger"></div>
+                            </div>
+                            <div class="pure-controls">
+                                <label class="pure-checkbox">
+                                    <input id="termsCheck" type="checkbox" required> Tôi đồng ý với các <a href="#" data-bs-toggle="modal" data-bs-target="#dieukhoandv">điều khoản dịch vụ</a> & <a href="#" data-bs-toggle="modal" data-bs-target="#quyenriengtu">quyền riêng tư</a> của Website!!!
+                                </label>
+                                <div class="error-message text-danger"></div>
+                                <button type="submit" class="pure-button pure-button-primary" disabled>Đăng ký</button>
+                            </div>
+                        </fieldset>
+                        <div id="registerMessage" class="mt-2 text-danger"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#login">Bạn có tài khoản?</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <br><br><br>
 
-    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    
+    <!-- Modal điều khoản dịch vụ -->
+    <div class="modal fade" id="dieukhoandv" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"><h2>ĐIỀU KHOẢN DỊCH VỤ - KVT</h2></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <p>
+                            <br>
+© Copyright 2025 by KimTuan. All Rights Reserved.
+<br><br>
+Chào mừng bạn đến với KVT - trang web cung cấp dịch vụ đọc truyện tranh và sách trực tuyến. Khi sử dụng trang web của chúng tôi, bạn đồng ý tuân thủ các điều khoản và điều kiện dưới đây. Vui lòng đọc kỹ trước khi sử dụng dịch vụ.
+<br><br>
+1. Chấp nhận Điều khoản<br>
+Bằng cách truy cập hoặc sử dụng trang web KVT, bạn xác nhận rằng bạn đã đọc, hiểu và đồng ý bị ràng buộc bởi các Điều khoản Dịch vụ này. Nếu bạn không đồng ý, vui lòng không sử dụng trang web.
+<br><br>
+2. Quyền Sở hữu Trí tuệ<br>
+Tất cả nội dung trên KVT, bao gồm nhưng không giới hạn ở văn bản, hình ảnh, truyện tranh, sách, thiết kế và logo, là tài sản trí tuệ của KimTuan hoặc các bên cấp phép, được bảo vệ bởi luật bản quyền © Copyright 2025 by KimTuan. All Rights Reserved.<br>
+Người dùng không được phép sao chép, tái tạo, phân phối, tải xuống, chỉnh sửa hoặc sử dụng bất kỳ hình ảnh, nội dung truyện tranh hoặc sách nào từ KVT dưới bất kỳ hình thức nào mà không có sự cho phép bằng văn bản từ KimTuan.
+<br><br>
+3. Những Điều Người Dùng Nên Làm<br>
+Sử dụng trang web để đọc truyện tranh và sách một cách hợp pháp và tôn trọng quyền sở hữu trí tuệ.<br>
+Báo cáo bất kỳ lỗi hoặc vi phạm nào bạn phát hiện trên trang web qua kênh liên hệ chính thức.<br>
+Tôn trọng cộng đồng người dùng khác và không tham gia vào các hành vi quấy rối hoặc gây rối.<br><br>
+4. Những Điều Người Dùng Không Được Làm<br>
+Cấm sao chép hoặc tải xuống hình ảnh truyện tranh và sách: Bạn không được phép sao chép, lưu trữ, chia sẻ hoặc sử dụng hình ảnh, nội dung từ truyện tranh và sách trên KVT cho bất kỳ mục đích cá nhân, thương mại hoặc phi thương mại nào.<br>
+Không phân phối lại nội dung của KVT trên các nền tảng khác, bao gồm nhưng không giới hạn ở mạng xã hội, trang web cá nhân hoặc ứng dụng khác.<br>
+Không sử dụng các công cụ tự động (bot, crawler) để truy xuất hoặc thu thập dữ liệu từ trang web mà không có sự cho phép.<br>
+Không tham gia vào các hành vi vi phạm pháp luật, chẳng hạn như phát tán nội dung bất hợp pháp hoặc xâm phạm quyền riêng tư của người khác.<br><br>
+5. Quyền của KVT<br>
+Chúng tôi có quyền tạm ngưng hoặc chấm dứt quyền truy cập của bạn vào KVT nếu phát hiện bạn vi phạm các điều khoản này, bao gồm hành vi sao chép hình ảnh hoặc nội dung trái phép.<br>
+KVT có thể cập nhật, chỉnh sửa hoặc thay đổi nội dung và điều khoản dịch vụ bất kỳ lúc nào mà không cần thông báo trước.<br><br>
+6. Giới hạn Trách nhiệm<br>
+KVT cung cấp nội dung "nguyên trạng" và không chịu trách nhiệm cho bất kỳ thiệt hại nào phát sinh từ việc sử dụng trang web, bao gồm nhưng không giới hạn ở lỗi kỹ thuật hoặc nội dung không chính xác.
+<br>Chúng tôi không chịu trách nhiệm cho các hành vi vi phạm bản quyền do người dùng thực hiện ngoài phạm vi kiểm soát của KVT.<br><br>
+7. Liên hệ<br>
+Nếu bạn có câu hỏi hoặc cần hỗ trợ về Điều khoản Dịch vụ này, vui lòng liên hệ với chúng tôi qua [địa chỉ email/ kênh liên lạc chính thức của bạn].<br>
+<br>
+8. Luật Áp dụng<br>
+Các Điều khoản Dịch vụ này được điều chỉnh bởi luật pháp [quốc gia của bạn, ví dụ: Việt Nam]. Mọi tranh chấp phát sinh sẽ được giải quyết theo quy định pháp luật hiện hành.<br>
+<br>
+Lưu ý cuối cùng:<br>
+<br>
+© Copyright 2025 by KimTuan. All Rights Reserved. Mọi hành vi sao chép, tái sử dụng hoặc phân phối nội dung từ KVT mà không được phép đều bị nghiêm cấm và có thể bị xử lý theo pháp luật.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal quyền riêng tư -->
+<div class="modal fade" id="quyenriengtu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"><h2>Quyền riêng tư - KVT</h2></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="privacy-policy-content">
+                    <h1>CHÍNH SÁCH QUYỀN RIÊNG TƯ</h1>
+                    <p class="update-date">Cập nhật lần cuối: 27/03/2025</p>
+
+                    <h2>1. Giới thiệu</h2>
+                    <p>Chào mừng bạn đến với trang web đọc truyện của chúng tôi. Chúng tôi cam kết bảo vệ quyền riêng tư và thông tin cá nhân của bạn. Chính sách Quyền riêng tư này mô tả cách chúng tôi thu thập, sử dụng, chia sẻ và bảo vệ thông tin cá nhân khi bạn sử dụng trang web và dịch vụ của chúng tôi.</p>
+                    <p>Bằng việc truy cập hoặc sử dụng trang web của chúng tôi, bạn đồng ý với các điều khoản được nêu trong Chính sách Quyền riêng tư này. Nếu bạn không đồng ý với Chính sách này, vui lòng không sử dụng trang web của chúng tôi.</p>
+                    <p>Chính sách này áp dụng cho tất cả người dùng tại Việt Nam và quốc tế. Chúng tôi tuân thủ luật pháp Việt Nam và các quy định pháp luật liên quan khác.</p>
+
+                    <h2>2. Thông tin chúng tôi thu thập</h2>
+
+                    <h3>2.1. Thông tin bạn cung cấp cho chúng tôi</h3>
+                    <p>Khi bạn đăng ký tài khoản hoặc sử dụng dịch vụ của chúng tôi, chúng tôi có thể thu thập các thông tin sau:</p>
+                    <ul>
+                        <li>Thông tin tài khoản: Họ tên, địa chỉ email, tên người dùng, mật khẩu, ngày sinh (để xác định độ tuổi).</li>
+                        <li>Thông tin liên hệ: Số điện thoại (nếu bạn cung cấp).</li>
+                        <li>Thông tin thanh toán: Thông tin thẻ tín dụng hoặc phương thức thanh toán khác (nếu bạn mua dịch vụ trả phí).</li>
+                        <li>Nội dung người dùng: Bình luận, đánh giá, và các tương tác khác mà bạn đăng trên trang web.</li>
+                        <li>Thông tin tùy chọn: Ảnh đại diện, tiểu sử, sở thích cá nhân mà bạn chọn chia sẻ.</li>
+                    </ul>
+
+                    <h3>2.2. Thông tin chúng tôi tự động thu thập</h3>
+                    <p>Khi bạn sử dụng trang web của chúng tôi, chúng tôi tự động thu thập:</p>
+                    <ul>
+                        <li>Thông tin về thiết bị: Loại thiết bị, hệ điều hành, trình duyệt web, địa chỉ IP.</li>
+                        <li>Thông tin sử dụng: Lịch sử đọc truyện, sở thích truyện, thời gian truy cập, trang bạn đã xem.</li>
+                        <li>Dữ liệu tương tác: Cách bạn tương tác với trang web, bao gồm các liên kết bạn nhấp vào và hành động bạn thực hiện.</li>
+                        <li>Vị trí: Thông tin vị trí địa lý dựa trên địa chỉ IP hoặc GPS (nếu bạn cho phép).</li>
+                    </ul>
+
+                    <h3>2.3. Thông tin từ bên thứ ba</h3>
+                    <p>Chúng tôi có thể nhận thông tin về bạn từ các nguồn bên thứ ba, bao gồm:</p>
+                    <ul>
+                        <li>Dịch vụ đăng nhập xã hội (nếu bạn chọn đăng nhập bằng tài khoản mạng xã hội).</li>
+                        <li>Đối tác kinh doanh và nhà cung cấp dịch vụ phân tích.</li>
+                        <li>Nguồn công khai hợp pháp.</li>
+                    </ul>
+
+                    <h2>3. Cách chúng tôi sử dụng thông tin</h2>
+                    <p>Chúng tôi sử dụng thông tin thu thập được cho các mục đích sau:</p>
+
+                    <h3>3.1. Cung cấp và cải thiện dịch vụ</h3>
+                    <ul>
+                        <li>Tạo và quản lý tài khoản của bạn.</li>
+                        <li>Cung cấp nội dung truyện phù hợp với sở thích của bạn.</li>
+                        <li>Ghi nhớ lịch sử đọc và vị trí bạn đã dừng.</li>
+                        <li>Cho phép bạn bình luận, đánh giá và tương tác với người dùng khác.</li>
+                        <li>Phát triển tính năng mới và cải thiện dịch vụ hiện có.</li>
+                    </ul>
+
+                    <h3>3.2. Cá nhân hóa trải nghiệm</h3>
+                    <ul>
+                        <li>Điều chỉnh giao diện người dùng theo tùy chọn của bạn.</li>
+                        <li>Cung cấp nội dung phù hợp với độ tuổi (đặc biệt quan trọng đối với người dùng dưới 13 tuổi).</li>
+                    </ul>
+
+                    <h3>3.3. Liên lạc với bạn</h3>
+                    <ul>
+                        <li>Gửi thông báo về cập nhật truyện mới, tính năng mới hoặc thay đổi dịch vụ.</li>
+                        <li>Phản hồi các yêu cầu, câu hỏi hoặc ý kiến phản hồi của bạn.</li>
+                        <li>Gửi thông tin tiếp thị nếu bạn đã đồng ý nhận.</li>
+                    </ul>
+
+                    <h3>3.4. Phân tích và nghiên cứu</h3>
+                    <ul>
+                        <li>Phân tích cách người dùng sử dụng trang web để cải thiện dịch vụ.</li>
+                        <li>Tạo báo cáo thống kê về xu hướng đọc truyện.</li>
+                        <li>Nghiên cứu và phát triển tính năng mới.</li>
+                    </ul>
+
+                    <h3>3.5. Bảo mật và tuân thủ pháp luật</h3>
+                    <ul>
+                        <li>Phát hiện, ngăn chặn và điều tra các hoạt động gian lận hoặc bất hợp pháp.</li>
+                        <li>Bảo vệ quyền, tài sản hoặc sự an toàn của chúng tôi và người dùng.</li>
+                        <li>Tuân thủ nghĩa vụ pháp lý và yêu cầu của cơ quan chức năng.</li>
+                    </ul>
+
+                    <h2>4. Chia sẻ thông tin với bên thứ ba</h2>
+                    <p>Chúng tôi có thể chia sẻ thông tin của bạn với các bên sau:</p>
+
+                    <h3>4.1. Nhà cung cấp dịch vụ</h3>
+                    <ul>
+                        <li>Dịch vụ lưu trữ và đám mây.</li>
+                        <li>Dịch vụ phân tích và thống kê.</li>
+                        <li>Dịch vụ hỗ trợ khách hàng.</li>
+                    </ul>
+                    <p>Các nhà cung cấp dịch vụ này chỉ được phép sử dụng thông tin của bạn để thực hiện dịch vụ cho chúng tôi và phải bảo vệ thông tin của bạn.</p>
+
+                    <h3>4.2. Đối tác kinh doanh</h3>
+                    <p>Chúng tôi có thể chia sẻ thông tin tổng hợp với đối tác kinh doanh để phân tích xu hướng, cải thiện dịch vụ và phát triển nội dung mới.</p>
+
+                    <h3>4.3. Yêu cầu pháp lý</h3>
+                    <p>Chúng tôi có thể tiết lộ thông tin của bạn khi được yêu cầu bởi pháp luật, quy trình tố tụng, hoặc yêu cầu từ cơ quan chính phủ.</p>
+
+                    <h3>4.4. Chuyển giao kinh doanh</h3>
+                    <p>Trong trường hợp sáp nhập, mua lại, bán tài sản hoặc chuyển giao dịch vụ, thông tin người dùng có thể là một phần của tài sản được chuyển giao. Chúng tôi sẽ thông báo cho bạn trước khi thông tin của bạn được chuyển giao và trở thành đối tượng của chính sách quyền riêng tư khác.</p>
+
+                    <h3>4.5. Với sự đồng ý của bạn</h3>
+                    <p>Chúng tôi có thể chia sẻ thông tin của bạn trong các trường hợp khác với sự đồng ý rõ ràng của bạn.</p>
+
+                    <h2>5. Cookie và công nghệ theo dõi</h2>
+
+                    <h3>5.1. Cookie là gì</h3>
+                    <p>Cookie là các tệp nhỏ được lưu trữ trên thiết bị của bạn khi bạn truy cập trang web. Chúng giúp ghi nhớ thông tin về bạn và lựa chọn của bạn để cải thiện trải nghiệm người dùng.</p>
+
+                    <h3>5.2. Cách chúng tôi sử dụng cookie</h3>
+                    <p>Chúng tôi sử dụng cookie và công nghệ tương tự cho các mục đích sau:</p>
+                    <ul>
+                        <li><strong>Cookie cần thiết:</strong> Cho phép các chức năng cơ bản của trang web hoạt động, như đăng nhập và ghi nhớ phiên làm việc.</li>
+                        <li><strong>Cookie phân tích:</strong> Giúp chúng tôi hiểu cách bạn sử dụng trang web để cải thiện hiệu suất và trải nghiệm người dùng.</li>
+                        <li><strong>Cookie chức năng:</strong> Ghi nhớ tùy chọn và cài đặt của bạn, như ngôn ngữ và vị trí đọc truyện.</li>
+                        <li><strong>Cookie quảng cáo:</strong> Được sử dụng để cung cấp quảng cáo phù hợp với sở thích của bạn.</li>
+                    </ul>
+
+                    <h3>5.3. Kiểm soát cookie</h3>
+                    <p>Hầu hết các trình duyệt cho phép bạn kiểm soát cookie thông qua cài đặt. Bạn có thể:</p>
+                    <ul>
+                        <li>Chấp nhận hoặc từ chối tất cả cookie.</li>
+                        <li>Chấp nhận một số loại cookie nhất định.</li>
+                        <li>Xóa cookie đã lưu trữ.</li>
+                    </ul>
+                    <p>Lưu ý rằng việc từ chối cookie có thể ảnh hưởng đến chức năng của trang web.</p>
+
+                    <h2>6. Bảo mật thông tin</h2>
+                    <p>Chúng tôi áp dụng các biện pháp bảo mật hợp lý để bảo vệ thông tin cá nhân của bạn khỏi truy cập trái phép, bao gồm:</p>
+                    <ul>
+                        <li>Mã hóa dữ liệu nhạy cảm.</li>
+                        <li>Hạn chế quyền truy cập vào thông tin cá nhân.</li>
+                        <li>Sử dụng tường lửa và các biện pháp bảo mật mạng.</li>
+                        <li>Thường xuyên đánh giá và cập nhật các biện pháp bảo mật.</li>
+                    </ul>
+                    <p>Tuy nhiên, không có phương thức truyền dữ liệu qua internet hoặc phương thức lưu trữ điện tử nào là an toàn 100%. Do đó, chúng tôi không thể đảm bảo an ninh tuyệt đối cho thông tin của bạn.</p>
+                    <p>Trong trường hợp xảy ra vi phạm dữ liệu ảnh hưởng đến thông tin cá nhân của bạn, chúng tôi sẽ thông báo cho bạn và cơ quan chức năng trong vòng 72 giờ theo quy định của pháp luật.</p>
+
+                    <h2>7. Quyền của bạn</h2>
+                    <p>Theo Nghị định 13/2023/NĐ-CP và các quy định pháp luật liên quan, bạn có các quyền sau đối với thông tin cá nhân của mình:</p>
+
+                    <h3>7.1. Quyền truy cập</h3>
+                    <p>Bạn có quyền yêu cầu bản sao thông tin cá nhân mà chúng tôi lưu giữ về bạn.</p>
+
+                    <h3>7.2. Quyền chỉnh sửa</h3>
+                    <p>Bạn có quyền yêu cầu chúng tôi cập nhật hoặc sửa đổi thông tin cá nhân không chính xác.</p>
+
+                    <h3>7.3. Quyền xóa</h3>
+                    <p>Bạn có quyền yêu cầu chúng tôi xóa thông tin cá nhân của bạn trong một số trường hợp nhất định.</p>
+
+                    <h3>7.4. Quyền hạn chế xử lý</h3>
+                    <p>Bạn có quyền yêu cầu chúng tôi hạn chế việc xử lý thông tin cá nhân của bạn trong một số trường hợp.</p>
+
+                    <h3>7.5. Quyền phản đối</h3>
+                    <p>Bạn có quyền phản đối việc xử lý thông tin cá nhân của bạn trong một số trường hợp nhất định.</p>
+
+                    <h3>7.6. Quyền rút lại sự đồng ý</h3>
+                    <p>Nếu việc xử lý dữ liệu dựa trên sự đồng ý của bạn, bạn có quyền rút lại sự đồng ý bất kỳ lúc nào.</p>
+
+                    <h3>7.7. Cách thực hiện quyền của bạn</h3>
+                    <p>Để thực hiện bất kỳ quyền nào nêu trên, vui lòng liên hệ với chúng tôi qua thông tin liên hệ ở phần sau.</p>
+
+                    <h2>8. Bảo vệ trẻ em</h2>
+                    <p>Chúng tôi cam kết bảo vệ quyền riêng tư của trẻ em dưới 13 tuổi. Trang web của chúng tôi có các biện pháp đặc biệt để bảo vệ trẻ em:</p>
+
+                    <h3>8.1. Nội dung phù hợp với độ tuổi</h3>
+                    <p>Trẻ em dưới 13 tuổi chỉ được phép xem các mẫu truyện đã được phê duyệt và phù hợp với độ tuổi. Chúng tôi áp dụng hệ thống phân loại nội dung để đảm bảo trẻ em không tiếp cận với nội dung không phù hợp.</p>
+
+                    <h3>8.2. Thu thập thông tin hạn chế</h3>
+                    <p>Chúng tôi chỉ thu thập thông tin tối thiểu cần thiết từ người dùng dưới 13 tuổi. Trước khi thu thập bất kỳ thông tin cá nhân nào từ trẻ em, chúng tôi yêu cầu sự đồng ý xác thực từ phụ huynh hoặc người giám hộ.</p>
+
+                    <h3>8.3. Quyền của phụ huynh</h3>
+                    <p>Phụ huynh hoặc người giám hộ có quyền:</p>
+                    <ul>
+                        <li>Xem thông tin đã thu thập từ con em họ.</li>
+                        <li>Yêu cầu xóa thông tin của con em họ.</li>
+                        <li>Từ chối cho phép thu thập hoặc sử dụng thông tin trong tương lai.</li>
+                    </ul>
+
+                    <h3>8.4. Kiểm soát của phụ huynh</h3>
+                    <p>Chúng tôi cung cấp các công cụ kiểm soát của phụ huynh để giúp họ quản lý trải nghiệm của con em mình trên trang web, bao gồm:</p>
+                    <ul>
+                        <li>Cài đặt tài khoản giới hạn quyền truy cập vào nội dung.</li>
+                        <li>Giám sát hoạt động và tương tác.</li>
+                        <li>Kiểm soát tính năng bình luận và tương tác xã hội.</li>
+                    </ul>
+                    <p>Nếu bạn là phụ huynh hoặc người giám hộ và có câu hỏi về việc thu thập thông tin từ con em bạn, vui lòng liên hệ với chúng tôi qua thông tin liên hệ ở cuối Chính sách này.</p>
+
+                    <h2>9. Lưu trữ và chuyển giao dữ liệu quốc tế</h2>
+                    <p>Thông tin của bạn có thể được lưu trữ và xử lý tại Việt Nam hoặc bất kỳ quốc gia nào khác.</p>
+                    <p>Khi chuyển giao dữ liệu cá nhân ra ngoài Việt Nam, chúng tôi đảm bảo rằng việc chuyển giao tuân thủ các quy định pháp luật hiện hành và có các biện pháp bảo vệ thích hợp.</p>
+
+                    <h2>10. Thay đổi chính sách</h2>
+                    <p>Chúng tôi có thể cập nhật Chính sách Quyền riêng tư này theo thời gian để phản ánh những thay đổi trong thực tiễn kinh doanh, dịch vụ mới hoặc yêu cầu pháp lý. Khi có thay đổi quan trọng, chúng tôi sẽ:</p>
+                    <ul>
+                        <li>Đăng thông báo nổi bật trên trang web.</li>
+                        <li>Gửi email thông báo cho bạn (nếu chúng tôi có địa chỉ email của bạn).</li>
+                        <li>Cập nhật ngày "Cập nhật lần cuối" ở đầu Chính sách.</li>
+                    </ul>
+                    <p>Chúng tôi khuyến khích bạn định kỳ xem lại Chính sách này để biết thông tin mới nhất về cách chúng tôi bảo vệ thông tin của bạn.</p>
+
+                    <h2>11. Liên hệ</h2>
+                    <p>Nếu bạn có câu hỏi, ý kiến hoặc yêu cầu liên quan đến Chính sách Quyền riêng tư này hoặc cách chúng tôi xử lý thông tin cá nhân của bạn, vui lòng liên hệ với chúng tôi theo:</p>
+                    <ul>
+                        <li><strong>Email:</strong> kimdominic714@gmail.com</li>
+                        <li><strong>Điện thoại:</strong> +84973336178</li>
+                        <li><strong>Địa chỉ:</strong> 3036 - Vườn Đầy Sao - Sao Hỏa - Hệ Mặt Trời</li>
+                    </ul>
+                    <p>Chúng tôi cam kết giải quyết mọi thắc mắc hoặc khiếu nại của bạn một cách kịp thời và hiệu quả.</p>
+                    <p>Bằng việc sử dụng trang web của chúng tôi, bạn xác nhận rằng bạn đã đọc và hiểu Chính sách này.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal lịch sử -->
+    <div class="modal fade" id="history" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Lịch sử xem</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="d-flex" role="search" style="width: 600px;" id="historySearchForm">
+                        <input class="form-control me-2" type="search" placeholder="Tìm kiếm trong lịch sử của bạn" aria-label="Search" id="historySearchInput">
+                        <button class="btn btn-outline-success" type="submit" style="width: 70px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg>
+                        </button>
+                    </form>
+                    <div id="historyList" class="mt-3">
+                        <!-- Danh sách lịch sử sẽ được render động -->
+                    </div>
+                    <div id="noHistoryMessage" class="text-center">
+                        <h1>Vui lòng đăng nhập để xem lại lịch sử xem!!!</h1>
+                        <button type="button" class="btn btn-success ms-5" data-bs-toggle="modal" data-bs-target="#login">Đăng nhập tại đây</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>    
+                  
+    <!-- Modal card -->
+    <div class="modal fade" id="card" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="cardModalLabel">Thông tin truyện</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Bên trái: Thông tin truyện -->
+                        <div class="col-md-4">
+                            <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row g-0">
+                                    <div class="col-md-12">
+                                        <img src="..." class="img-fluid rounded-start" alt="..." id="comicImage">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="card-body">
+                                            <h5 class="card-title" id="comicTitle">Tên truyện</h5>
+                                            <p class="card-text" id="comicAuthor">Tên tác giả.</p>
+                                            <p class="card-text" id="comicGenre">Thể loại.</p>
+                                            <p class="card-text"><small class="text-body-secondary" id="comicContent">Nội dung truyện</small></p>
+                                            <!-- Nút Chia sẻ -->
+                                            <button type="button" class="btn btn-outline-primary mt-2" id="shareComicBtn">
+                                                <i class="bi bi-share"></i> Chia sẻ
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bên phải: Thanh tìm kiếm và danh sách chương -->
+                        <div class="col-md-8">
+                            <h5>Danh sách chương</h5>
+                            <!-- Thêm hai nút Đọc từ đầu và Đọc chương mới nhất -->
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-primary me-2" id="readFromStartBtn">Đọc từ đầu</button>
+                                <button type="button" class="btn btn-primary" id="readLatestChapterBtn">Đọc chương mới nhất</button>
+                            </div>
+                            <form class="d-flex mb-3" role="search" id="chapterSearchForm">
+                                <input class="form-control me-2" type="search" placeholder="Tìm chương truyện của bạn" aria-label="Search" id="chapterSearchInput">
+                                <button class="btn btn-outline-success" type="submit" style="width: 70px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                    </svg>
+                                </button>
+                            </form>
+                            <div class="accordion chapter-scroll-container" id="chapterAccordion" style="max-height: 400px; overflow-y: auto;">
+                                <!-- Danh sách chương sẽ được render động bởi chapter.js -->
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Modal đọc truyện -->
+                    <div class="modal fade" id="doctruyen" tabindex="-1" aria-labelledby="doctruyenModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-fullscreen">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="doctruyenModalLabel">Tên chương</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body"></div>
+                                <div class="modal-footer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal báo cáo sự cố -->
+  <div class="modal fade" id="reportIssueModal" tabindex="-1" aria-labelledby="reportIssueModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportIssueModalLabel">Báo cáo sự cố</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="reportIssueForm" method="POST" action="/report">
+                    <div class="mb-3">
+                        <label for="reportTitle" class="form-label">Tiêu đề</label>
+                        <input type="text" class="form-control" id="reportTitle" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="issueDescription" class="form-label">Mô tả sự cố</label>
+                        <textarea class="form-control" id="issueDescription" name="content" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactEmail" class="form-label">Email liên hệ</label>
+                        <input type="email" class="form-control" id="contactEmail" name="email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi báo cáo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Bảng Xếp Hạng -->
+<div class="modal fade" id="rankingModal" tabindex="-1" aria-labelledby="rankingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rankingModalLabel">Bảng xếp hạng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <ul class="nav nav-pills" id="rankingTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-ranking-type="most-read" href="#">Đọc nhiều nhất</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-ranking-type="most-liked" href="#">Yêu thích nhất</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-ranking-type="highest-rated" href="#">Đánh giá cao nhất</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-ranking-type="weekly-top" href="#">Top tuần</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-ranking-type="daily-top" href="#">Top ngày</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="5%">Hạng</th>
+                                <th scope="col" width="15%">Ảnh bìa</th>
+                                <th scope="col" width="35%">Tên truyện</th>
+                                <th scope="col" width="15%">Tác giả</th>
+                                <th scope="col" width="15%">Thể loại</th>
+                                <th scope="col" width="15%" id="rankingMetricHeader">Lượt xem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankingTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">Đang tải dữ liệu...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cài đặt (Trung tâm tài khoản - Modal 1) -->
+<div class="modal fade settings-modal" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="settingsModalLabel">Trung tâm tài khoản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Quản lý phần cài đặt tài khoản và trạng nghiệm kết nối trên các công nghệ của MangaComic.</p>
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person"></i> Thông tin cá nhân
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" id="securityButton">
+                        <i class="bi bi-shield-lock"></i> Mật khẩu và bảo mật
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-gear"></i> Tùy chọn quảng cáo
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-check-circle"></i> Xác minh
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        Thêm trung tâm tài khoản
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Mật khẩu và bảo mật (Modal 2) -->
+<div class="modal fade security-modal" id="securityModal" tabindex="-1" aria-labelledby="securityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="securityModalLabel">Mật khẩu và bảo mật</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Quản lý mật khẩu, tùy chọn đăng nhập và phương thức khôi phục.</p>
+                <h6>Đăng nhập và khôi phục</h6>
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action" id="changePasswordButton">
+                        Đổi mật khẩu
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        Xác thực 2 yếu tố
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        Thông tin đăng nhập đã lưu
+                    </a>
+                </div>
+                <h6 class="mt-4">Kiểm tra bảo mật</h6>
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action">
+                        Nơi bạn đang nhập
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        Cảnh báo đăng nhập
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        Email gắn đẩy
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        Kiểm tra bảo mật
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Đổi mật khẩu (Modal 3) -->
+<div class="modal fade change-password-modal" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Đổi mật khẩu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Mật khẩu mới phải đáp ứng các yêu cầu sau:</p>
+                <ul class="mb-3">
+                    <li>Độ dài từ 8 đến 20 ký tự</li>
+                    <li>Chứa ít nhất 1 chữ hoa (A-Z)</li>
+                    <li>Chứa ít nhất 1 chữ thường (a-z)</li>
+                    <li>Chứa ít nhất 1 số (0-9)</li>
+                    <li>Chứa ít nhất 1 ký tự đặc biệt (!@#$%^&*)</li>
+                </ul>
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Mật khẩu hiện tại</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                        <div id="passwordRequirements" class="form-text small"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmNewPassword" class="form-label">Nhập lại mật khẩu mới</label>
+                        <input type="password" class="form-control" id="confirmNewPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
+                    <div id="changePasswordMessage" class="mt-2"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thông tin tài khoản -->
+    <div class="modal fade" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title" id="userProfileModalLabel"><i class="bi bi-person-circle me-2"></i>Thông tin tài khoản</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+              <!-- Tabs -->
+              <ul class="nav nav-tabs nav-fill" id="profileTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="true">
+                    <i class="bi bi-person me-1"></i>Hồ sơ
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="favorites-tab" data-bs-toggle="tab" data-bs-target="#favorites-tab-pane" type="button" role="tab" aria-controls="favorites-tab-pane" aria-selected="false">
+                    <i class="bi bi-heart me-1"></i>Truyện yêu thích
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-tab-pane" type="button" role="tab" aria-controls="history-tab-pane" aria-selected="false">
+                    <i class="bi bi-clock-history me-1"></i>Lịch sử đọc
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats-tab-pane" type="button" role="tab" aria-controls="stats-tab-pane" aria-selected="false">
+                    <i class="bi bi-bar-chart me-1"></i>Thống kê
+                  </button>
+                </li>
+              </ul>
+              
+              <!-- Tab content -->
+              <div class="tab-content p-3" id="profileTabsContent">
+                <!-- Hồ sơ -->
+                <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                  <div class="d-flex flex-column flex-md-row">
+                    <div class="text-center me-md-4 mb-3 mb-md-0 position-relative avatar-wrapper">
+                      <div class="avatar-container mb-2">
+                        <div id="profileAvatarPreview" class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 120px; height: 120px; font-size: 48px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); background-size: cover; background-position: center;">
+                          <span id="profileInitials"></span>
+                        </div>
+                        <label for="avatarInput" id="changeAvatarButton" class="change-avatar-button">
+                          <i class="bi bi-camera-fill"></i>
+                        </label>
+                        <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                      </div>
+                    </div>
+                    <div class="flex-grow-1">
+                      <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body">
+                          <h5 class="border-bottom pb-2 mb-3">Thông tin cá nhân</h5>
+                          <div class="row mb-2">
+                            <div class="col-md-4"><strong><i class="bi bi-person-fill me-2"></i>Tên người dùng:</strong></div>
+                            <div class="col-md-8"><span id="profileUsername" class="text-primary"></span></div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="col-md-4"><strong><i class="bi bi-envelope-fill me-2"></i>Email:</strong></div>
+                            <div class="col-md-8"><span id="profileEmail"></span></div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="col-md-4"><strong><i class="bi bi-calendar-date me-2"></i>Ngày tham gia:</strong></div>
+                            <div class="col-md-8"><span id="profileJoinDate"></span></div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="col-md-4"><strong><i class="bi bi-shield-fill me-2"></i>Vai trò:</strong></div>
+                            <div class="col-md-8"><span id="profileRole" class="badge bg-success"></span></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                          <i class="bi bi-shield-lock me-1"></i>Đổi mật khẩu
+                        </button>
+                        <button type="button" class="btn btn-outline-primary">
+                          <i class="bi bi-gear me-1"></i>Cài đặt tài khoản
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Truyện yêu thích -->
+                <div class="tab-pane fade" id="favorites-tab-pane" role="tabpanel" aria-labelledby="favorites-tab" tabindex="0">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0"><i class="bi bi-heart-fill text-danger me-2"></i>Truyện yêu thích</h5>
+                    <div class="input-group" style="max-width: 250px;">
+                      <input type="text" class="form-control form-control-sm" placeholder="Tìm truyện..." id="searchFavorites">
+                      <button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-search"></i></button>
+                    </div>
+                  </div>
+                  
+                  <div id="favoriteComicsList" class="row row-cols-1 row-cols-md-3 g-3">
+                    <!-- Danh sách truyện yêu thích sẽ được thêm động -->
+                  </div>
+                  
+                  <div id="noFavoritesMessage" class="text-center py-5 d-none">
+                    <i class="bi bi-heart text-muted" style="font-size: 3rem;"></i>
+                    <p class="mt-3">Chưa có truyện nào trong danh sách yêu thích.</p>
+                    <button class="btn btn-primary mt-2">Khám phá truyện</button>
+                  </div>
+                </div>
+                
+                <!-- Thống kê -->
+                <div class="tab-pane fade" id="stats-tab-pane" role="tabpanel" aria-labelledby="stats-tab" tabindex="0">
+                  <h5 class="border-bottom pb-2 mb-3"><i class="bi bi-bar-chart-fill me-2"></i>Thống kê hoạt động</h5>
+                  <div class="row g-3">
+                    <div class="col-md-6 col-lg-3">
+                      <div class="card border-0 bg-primary text-white shadow-sm card-stats">
+                        <div class="card-body text-center">
+                          <i class="bi bi-heart-fill mb-2" style="font-size: 2rem;"></i>
+                          <h6 class="card-title">Đã thích</h6>
+                          <h3 id="favoritesCount">0</h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                      <div class="card border-0 bg-success text-white shadow-sm card-stats">
+                        <div class="card-body text-center">
+                          <i class="bi bi-book-fill mb-2" style="font-size: 2rem;"></i>
+                          <h6 class="card-title">Đã đọc</h6>
+                          <h3 id="readCount">0</h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                      <div class="card border-0 bg-info text-white shadow-sm card-stats">
+                        <div class="card-body text-center">
+                          <i class="bi bi-chat-fill mb-2" style="font-size: 2rem;"></i>
+                          <h6 class="card-title">Bình luận</h6>
+                          <h3 id="commentCount">0</h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                      <div class="card border-0 bg-warning text-white shadow-sm card-stats">
+                        <div class="card-body text-center">
+                          <i class="bi bi-share-fill mb-2" style="font-size: 2rem;"></i>
+                          <h6 class="card-title">Chia sẻ</h6>
+                          <h3 id="shareCount">0</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <h5 class="border-bottom pb-2 mb-3 mt-4">Thể loại yêu thích</h5>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="progress-stacked">
+                        <div class="progress" role="progressbar" aria-label="Hành động" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
+                          <div class="progress-bar bg-danger">Hành động</div>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="Phiêu lưu" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                          <div class="progress-bar bg-success">Phiêu lưu</div>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="Hài hước" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width: 15%">
+                          <div class="progress-bar bg-primary">Hài hước</div>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="Khác" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: 35%">
+                          <div class="progress-bar bg-secondary">Khác</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Lịch sử đọc -->
+                <div class="tab-pane fade" id="history-tab-pane" role="tabpanel" aria-labelledby="history-tab" tabindex="0">
+                  <div class="px-3 py-2">
+                    <h4 class="mb-3">
+                        <i class="bi bi-clock-history"></i> Lịch sử đọc truyện
+                        <button id="clearHistoryBtn" class="btn btn-sm btn-outline-danger float-end">
+                            <i class="bi bi-trash"></i> Xóa tất cả
+                        </button>
+                    </h4>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" id="searchHistory" class="form-control" placeholder="Tìm kiếm trong lịch sử..." aria-label="Tìm kiếm" aria-describedby="searchHistoryBtn">
+                            <button class="btn btn-outline-primary" type="button" id="searchHistoryBtn"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                    <div id="noHistoryMessage" class="alert alert-warning d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>Bạn chưa có lịch sử đọc truyện hoặc chưa đăng nhập. Vui lòng đăng nhập để xem lịch sử!</div>
+                    </div>
+                    <div id="readingHistoryList" class="list-group"></div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+<style>
+  /* Thiết lập giao diện tab */
+  #profileTabs .nav-link {
+    color: #6c757d;
+    font-weight: 500;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+  }
+  
+  #profileTabs .nav-link:hover {
+    color: #0d6efd;
+  }
+  
+  #profileTabs .nav-link.active {
+    color: #0d6efd;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #0d6efd;
+  }
+  
+  /* Hiệu ứng cho các card */
+  .card-stats {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+  }
+  
+  .card-stats:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+  }
+  
+  /* Hiệu ứng cho card truyện */
+  #favoriteComicsList .card {
+    transition: all 0.3s ease;
+  }
+  
+  #favoriteComicsList .card:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15) !important;
+    transform: translateY(-3px);
+  }
+  
+  #favoriteComicsList .remove-favorite-btn {
+    opacity: 0.7;
+    transition: all 0.2s ease;
+  }
+  
+  #favoriteComicsList .card:hover .remove-favorite-btn {
+    opacity: 1;
+  }
+  
+  /* Progress bar cải tiến */
+  .progress-stacked {
+    height: 30px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .progress-stacked .progress-bar {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+  }
+  
+  /* Style cho biểu tượng camera */
+  .change-avatar-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #0d6efd;
+    color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+  
+  .change-avatar-button:hover {
+    opacity: 1;
+  }
+</style>
+
+    
+
+    <!-- Background-->
+<body class="d-flex flex-column h-100">
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="check2" viewBox="0 0 16 16">
+      <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+    </symbol>
+    <symbol id="circle-half" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+    </symbol>
+    <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+      <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+      <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+    </symbol>
+    <symbol id="sun-fill" viewBox="0 0 16 16">
+      <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+    </symbol>
+  </svg>
+
+  
+
+        
+        
+    </div>
+
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        
+        <a class="navbar-brand ps-3" href="#">MANGA COMIC</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+            <i class="bi bi-list"></i>
+        </button>
+
+
+        <div class="d-flex align-items-center ms-auto">
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" type="button" style="width: 70px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </button>
+            </form>
+
+            
+
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- Nút Theme Toggle trong navbar -->
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" href="#" id="navbar-theme-toggle">
+                        <i class="bi bi-sun-fill" id="navbar-light-icon" style="font-size: 1.2rem; display: none;"></i>
+                        <i class="bi bi-moon-stars-fill" id="navbar-dark-icon" style="font-size: 1.2rem;"></i>
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Thêm các nút Tin nhắn và Thông báo (ẩn ban đầu) -->
+            <ul class="navbar-nav me-2 mb-2 mb-lg-0 d-none ms-5" id="userActions">
+                <li class="nav-item position-relative">
+                    <a class="nav-link" href="#" id="messagesButton">
+                        <i class="bi bi-chat-dots"></i>
+                        <!-- Badge for unread messages -->
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" id="messagesBadge">
+                            0
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item position-relative">
+                    <a class="nav-link" href="#" id="notificationsButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bell"></i>
+                        <!-- Badge for unread notifications -->
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" id="notificationsBadge">
+                            0
+                            <span class="visually-hidden">unread notifications</span>
+                        </span>
+                    </a>
+                    <!-- Dropdown menu cho thông báo -->
+                    <div class="dropdown-menu dropdown-menu-end notification-dropdown p-0" style="width: 320px; max-height: 400px; overflow-y: auto;">
+                        <div class="p-2 border-bottom d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Thông báo</h6>
+                            <button class="btn btn-sm text-primary" id="markAllReadBtn">Đánh dấu đã đọc</button>
+                        </div>
+                        <div class="notification-list">
+                            <!-- Thông báo sẽ được thêm vào đây động bằng JavaScript -->
+                        </div>
+                        <div class="p-2 border-top text-center">
+                            <a href="#" class="text-decoration-none" id="viewAllNotifications">Xem tất cả thông báo</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!-- User dropdown -->
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="avatar-container" style="width: 35px; height: 35px; overflow: hidden; border-radius: 50%; margin-right: 8px; display: inline-flex; align-items: center; justify-content: center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                            </svg>
+                        </div>
+                        <span>Đăng nhập/Đăng ký</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end py-2" style="min-width: 200px;">
+                        <li class="px-3 mb-2">
+                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#login">Đăng nhập</button>
+                        </li>
+                        <li><hr class="dropdown-divider mx-2"></li>
+                        <li class="px-3">
+                            <button type="button" class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#logup">Đăng ký</button>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    
+</nav>
+
+    
+  <!-- Theme dropdown đã được thay thế bằng nút toggle trong navbar -->
+
+    <br>
+
+    <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-    <script src="/js/index/auth.js"></script>
+
+    <!-- Custom scripts -->
+    <script src="/js/index/modal-backdrop-fix.js"></script>
+    <script src="/js/index/api-service.js"></script>
+    <script src="/js/index/search.js"></script>
+    <script src="/js/index/chapter_scroll.js"></script>
+    <script src="/js/index/cookie-optimization.js"></script>
+    <script src="/js/index/chapter.js"></script>
+    <script src="/js/index/card_title.js"></script>
+    <script src="/js/index/login.js"></script>
+    <script src="/js/index/logup.js"></script>
+    <script src="/js/index/genre.js"></script>
+    <!--<script src="/js/index/anti-copy.js"></script>-->
+    <!--<script src="/js/index/block-devtools.js"></script>-->
+    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+    <script src="/js/index/favorites.js"></script>
+    <script src="/js/index/history.js"></script>
     <script src="/js/index/notifications.js"></script>
-    <script src="/js/index/theme-toggle.js"></script>
     <script src="/js/index/language-switcher.js"></script>
     <script src="/js/index/rankings.js"></script>
-    <script src="/js/index/gioithieu.js"></script>
-    <script src="/js/index/card_title.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Sidebar Toggle Functionality
-            const sidebarToggle = document.getElementById('sidebarToggle');
+        // Thêm script để xử lý toggle theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarThemeToggler = document.getElementById('navbar-theme-toggle');
+            const navbarLightIcon = document.getElementById('navbar-light-icon');
+            const navbarDarkIcon = document.getElementById('navbar-dark-icon');
+            const htmlElement = document.documentElement;
             
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.body.classList.toggle('sb-sidenav-toggled');
-                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-                });
+            // Kiểm tra theme hiện tại và cập nhật trạng thái ban đầu
+            const updateIcons = () => {
+                const currentTheme = htmlElement.getAttribute('data-bs-theme');
+                if (currentTheme === 'dark') {
+                    navbarLightIcon.style.display = 'none';
+                    navbarDarkIcon.style.display = 'block';
+                } else {
+                    navbarLightIcon.style.display = 'block';
+                    navbarDarkIcon.style.display = 'none';
+                }
+            };
+            
+            // Khởi tạo
+            updateIcons();
+            
+            // Toggle theme
+            navbarThemeToggler.addEventListener('click', function(e) {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+                const currentTheme = htmlElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                // Cập nhật giao diện
+                htmlElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcons();
+                
+                console.log('Theme changed to:', newTheme);
+            });
+
+            // Kiểm tra nếu URL có tham số reportSuccess=true thì hiển thị toast
+            const urlParams = new URLSearchParams(window.location.search);
+            const reportSuccess = urlParams.get('reportSuccess');
+            
+            if (reportSuccess === 'true') {
+                const toast = new bootstrap.Toast(document.getElementById('reportSuccessToast'));
+                toast.show();
             }
+        });
+    </script>
+
+
+
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Sidebar Toggle Functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.body.classList.toggle('sb-sidenav-toggled');
+                localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+            });
+        }
+        
+        // Check for previous sidebar state
+        if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+            document.body.classList.add('sb-sidenav-toggled');
+        }
+        
+        // Mobile responsive handling
+        function handleResponsive() {
+            if (window.innerWidth < 768) {
+                document.body.classList.add('sb-sidenav-toggled');
+            } else {
+                if (localStorage.getItem('sb|sidebar-toggle') !== 'true') {
+                    document.body.classList.remove('sb-sidenav-toggled');
+                }
+            }
+        }
+        
+        // Initialize responsive state
+        handleResponsive();
+        
+        // Listen for window resize
+        window.addEventListener('resize', handleResponsive);
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const isSmallScreen = window.innerWidth < 768;
+            const isClickOutsideSidebar = !event.target.closest('#layoutSidenav_nav');
+            const isClickToggleButton = event.target.closest('#sidebarToggle');
+            const isSidebarVisible = !document.body.classList.contains('sb-sidenav-toggled');
             
-            // Check for previous sidebar state
-            if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+            if (isSmallScreen && isClickOutsideSidebar && !isClickToggleButton && isSidebarVisible) {
                 document.body.classList.add('sb-sidenav-toggled');
             }
-            
-            // Mobile responsive handling
-            function handleResponsive() {
+        });
+
+        // Đảm bảo các modal hoạt động đúng với sidebar
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('shown.bs.modal', function() {
                 if (window.innerWidth < 768) {
                     document.body.classList.add('sb-sidenav-toggled');
-                } else {
-                    if (localStorage.getItem('sb|sidebar-toggle') !== 'true') {
-                        document.body.classList.remove('sb-sidenav-toggled');
-                    }
-                }
-            }
-            
-            // Initialize responsive state
-            handleResponsive();
-            
-            // Listen for window resize
-            window.addEventListener('resize', handleResponsive);
-            
-            // Close sidebar when clicking outside on mobile
-            document.addEventListener('click', function(event) {
-                const isSmallScreen = window.innerWidth < 768;
-                const isClickOutsideSidebar = !event.target.closest('#layoutSidenav_nav');
-                const isClickToggleButton = event.target.closest('#sidebarToggle');
-                const isSidebarVisible = !document.body.classList.contains('sb-sidenav-toggled');
-                
-                if (isSmallScreen && isClickOutsideSidebar && !isClickToggleButton && isSidebarVisible) {
-                    document.body.classList.add('sb-sidenav-toggled');
                 }
             });
+        });
 
-            // Đảm bảo các modal hoạt động đúng với sidebar
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                modal.addEventListener('shown.bs.modal', function() {
-                    if (window.innerWidth < 768) {
-                        document.body.classList.add('sb-sidenav-toggled');
-                    }
-                });
-            });
-
-            // Đồng bộ theme toggle giữa sidebar và navbar
-            const sidebarThemeToggle = document.getElementById('sidebar-theme-toggle');
-            const sidebarLightIcon = document.getElementById('sidebar-light-icon');
-            const sidebarDarkIcon = document.getElementById('sidebar-dark-icon');
-            
-            if (sidebarThemeToggle && sidebarLightIcon && sidebarDarkIcon) {
-                sidebarThemeToggle.addEventListener('click', function() {
-                    const htmlElement = document.documentElement;
-                    const currentTheme = htmlElement.getAttribute('data-bs-theme');
-                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                    
-                    htmlElement.setAttribute('data-bs-theme', newTheme);
-                    localStorage.setItem('theme', newTheme);
-                    
-                    if (newTheme === 'dark') {
-                        sidebarLightIcon.style.display = 'none';
-                        sidebarDarkIcon.style.display = 'inline-block';
-                    } else {
-                        sidebarLightIcon.style.display = 'inline-block';
-                        sidebarDarkIcon.style.display = 'none';
-                    }
-                });
+        // Đồng bộ theme toggle giữa sidebar và navbar
+        const sidebarThemeToggle = document.getElementById('sidebar-theme-toggle');
+        const sidebarLightIcon = document.getElementById('sidebar-light-icon');
+        const sidebarDarkIcon = document.getElementById('sidebar-dark-icon');
+        
+        if (sidebarThemeToggle && sidebarLightIcon && sidebarDarkIcon) {
+            sidebarThemeToggle.addEventListener('click', function() {
+                const htmlElement = document.documentElement;
+                const currentTheme = htmlElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 
-                // Đồng bộ trạng thái icon khi tải trang
-                const currentTheme = localStorage.getItem('theme') || 'light';
-                if (currentTheme === 'dark') {
+                htmlElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                if (newTheme === 'dark') {
                     sidebarLightIcon.style.display = 'none';
                     sidebarDarkIcon.style.display = 'inline-block';
                 } else {
                     sidebarLightIcon.style.display = 'inline-block';
                     sidebarDarkIcon.style.display = 'none';
                 }
+            });
+            
+            // Đồng bộ trạng thái icon khi tải trang
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                sidebarLightIcon.style.display = 'none';
+                sidebarDarkIcon.style.display = 'inline-block';
+            } else {
+                sidebarLightIcon.style.display = 'inline-block';
+                sidebarDarkIcon.style.display = 'none';
             }
-        });
-    </script>
+        }
+    });
+</script>
+
+<script>
+    // Xử lý mở modal profile và kích hoạt tab từ sidebar
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarHistoryLink = document.getElementById('sidebarHistoryLink');
+        const profileModalElement = document.getElementById('userProfileModal');
+        
+        if (sidebarHistoryLink && profileModalElement) {
+            sidebarHistoryLink.addEventListener('click', function(event) {
+                event.preventDefault(); // Ngăn hành vi mặc định (mở modal ngay lập tức)
+
+                // 1. Kiểm tra đăng nhập
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    // Nếu chưa đăng nhập, mở modal đăng nhập thay thế
+                    const loginModal = new bootstrap.Modal(document.getElementById('login'));
+                    loginModal.show();
+                    return; // Dừng thực thi
+                }
+
+                // 2. Lấy ID tab cần hiển thị từ thuộc tính data
+                const tabTargetId = this.getAttribute('data-show-tab');
+                if (!tabTargetId) return;
+
+                // 3. Lấy instance của modal profile
+                const profileModal = bootstrap.Modal.getOrCreateInstance(profileModalElement);
+
+                // 4. Tìm nút tab tương ứng
+                const targetTabButton = profileModalElement.querySelector(`.nav-link[data-bs-target="#${tabTargetId}-pane"]`);
+                
+                if (targetTabButton) {
+                    // 5. Kích hoạt tab bằng Bootstrap API
+                    const tab = new bootstrap.Tab(targetTabButton);
+                    tab.show();
+                } else {
+                    console.warn('Không tìm thấy nút tab cho:', tabTargetId);
+                    // Nếu không tìm thấy tab, vẫn mở modal nhưng ở tab mặc định
+                }
+
+                // 6. Hiển thị modal profile
+                profileModal.show();
+            });
+        }
+    });
+</script>
+    
 </body>
 </html>

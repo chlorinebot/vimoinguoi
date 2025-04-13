@@ -323,39 +323,41 @@ const ApiService = (function () {
                 throw error;
             }
         },
-        /**
- * Lấy thông tin hồ sơ người dùng
- */
-getUserProfile: async (userId) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
-            method: 'GET',
-            headers: getAuthHeaders()
-        });
-        return handleResponse(response);
-    } catch (error) {
-        console.error('Get user profile error:', error);
-        throw error;
-    }
-},
 
-/**
- * Lấy danh sách truyện yêu thích của người dùng
- */
-getUserFavorites: async (userId) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/favorites/${userId}`, {
-            method: 'GET',
-            headers: getAuthHeaders()
-        });
-        const data = await handleResponse(response);
-        // Đảm bảo dữ liệu trả về là mảng
-        return Array.isArray(data) ? data : [];
-    } catch (error) {
-        console.error('Get user favorites error:', error);
-        throw error;
-    }
-},
+        /**
+         * Lấy thông tin hồ sơ người dùng
+         */
+        getUserProfile: async (userId) => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+                    method: 'GET',
+                    headers: getAuthHeaders()
+                });
+                return handleResponse(response);
+            } catch (error) {
+                console.error('Get user profile error:', error);
+                throw error;
+            }
+        },
+
+        /**
+         * Lấy danh sách truyện yêu thích của người dùng
+         */
+        getUserFavorites: async (userId) => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/favorites/${userId}`, {
+                    method: 'GET',
+                    headers: getAuthHeaders()
+                });
+                const data = await handleResponse(response);
+                // Đảm bảo dữ liệu trả về là mảng
+                return Array.isArray(data) ? data : [];
+            } catch (error) {
+                console.error('Get user favorites error:', error);
+                throw error;
+            }
+        },
+
         /**
          * Xóa truyện khỏi danh sách yêu thích
          */
@@ -455,8 +457,44 @@ getUserFavorites: async (userId) => {
                 console.error('Get daily top rankings error:', error);
                 throw error;
             }
-        }
-        
+        },
+
+        /**
+         * Tải ảnh đại diện mới cho người dùng.
+         * @param {string} userId - ID của người dùng.
+         * @param {FormData} formData - Đối tượng FormData chứa file ảnh (key là 'avatar').
+         * @returns {Promise<object>} - Promise trả về dữ liệu từ server (ví dụ: { message, avatar_url }).
+         */
+        async uploadAvatar(userId, formData) {
+            try {
+                // Lấy thông tin avatar cũ trước khi upload
+                const currentUser = await this.getUserProfile(userId);
+                const oldAvatarUrl = currentUser.avatar_url;
+                
+                // Thêm thông tin về avatar cũ vào formData
+                if (oldAvatarUrl) {
+                    formData.append('oldAvatarUrl', oldAvatarUrl);
+                }
+
+                const response = await fetch(`/api/users/${userId}/avatar`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Không thể tải lên avatar');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Lỗi khi tải lên avatar:', error);
+                throw error;
+            }
+        },
     };
 })();
 

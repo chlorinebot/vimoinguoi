@@ -213,4 +213,121 @@ const changePassword = async (username, currentPassword, newPassword) => {
     }
 };
 
-module.exports = { getAllUsers, registerUser, loginUser, deleteUser, updateUser, countUsers, changePassword };
+// Thêm người dùng vào blacklist
+const addToBlacklist = async (userId, reason) => {
+    const connection = await dbPool.getConnection();
+    try {
+        await connection.beginTransaction();
+        
+        // Kiểm tra xem người dùng có tồn tại không
+        const [users] = await connection.query('SELECT id, username FROM users WHERE id = ?', [userId]);
+        if (users.length === 0) {
+            throw new Error('Người dùng không tồn tại');
+        }
+        
+        // Kiểm tra xem người dùng đã có trong blacklist chưa
+        const [existingBlacklist] = await connection.query('SELECT * FROM blacklist WHERE user_id = ?', [userId]);
+        if (existingBlacklist.length > 0) {
+            throw new Error('Người dùng đã có trong danh sách đen');
+        }
+        
+        // Thêm vào blacklist
+        const [result] = await connection.query(
+            'INSERT INTO blacklist (user_id, reason, created_at) VALUES (?, ?, NOW())',
+            [userId, reason]
+        );
+        
+        await connection.commit();
+        return { 
+            success: true,
+            message: 'Đã thêm người dùng vào danh sách đen',
+            blacklistId: result.insertId
+        };
+    } catch (err) {
+        await connection.rollback();
+        console.error('Lỗi khi thêm vào blacklist:', err);
+        throw err;
+    } finally {
+        connection.release();
+    }
+};
+
+// Xóa người dùng khỏi blacklist
+const removeFromBlacklist = async (userId) => {
+    const connection = await dbPool.getConnection();
+    try {
+        await connection.beginTransaction();
+        
+        // Kiểm tra xem người dùng có trong blacklist không
+        const [existingBlacklist] = await connection.query('SELECT * FROM blacklist WHERE user_id = ?', [userId]);
+        if (existingBlacklist.length === 0) {
+            throw new Error('Người dùng không có trong danh sách đen');
+        }
+        
+        // Xóa khỏi blacklist
+        const [result] = await connection.query('DELETE FROM blacklist WHERE user_id = ?', [userId]);
+        
+        await connection.commit();
+        return { 
+            success: true,
+            message: 'Đã xóa người dùng khỏi danh sách đen',
+            affectedRows: result.affectedRows
+        };
+    } catch (err) {
+        await connection.rollback();
+        console.error('Lỗi khi xóa khỏi blacklist:', err);
+        throw err;
+    } finally {
+        connection.release();
+    }
+};
+
+// Lấy danh sách người dùng trong blacklist
+const getBlacklist = async () => {
+    const connection = await dbPool.getConnection();
+    try {
+        const [rows] = await connection.query(`
+            SELECT b.id, b.user_id, u.username, u.email, b.reason, b.created_at 
+            FROM blacklist b
+            JOIN users u ON b.user_id = u.id
+            ORDER BY b.created_at DESC
+        `);
+        return rows;
+    } catch (err) {
+        console.error('Lỗi khi lấy danh sách đen:', err);
+        throw err;
+    } finally {
+        connection.release();
+    }
+};
+
+// Kiểm tra xem người dùng có trong blacklist không
+const checkBlacklist = async (userId) => {
+    const connection = await dbPool.getConnection();
+    try {
+        const [rows] = await connection.query('SELECT * FROM blacklist WHERE user_id = ?', [userId]);
+        return {
+            isBlacklisted: rows.length > 0,
+            blacklistInfo: rows.length > 0 ? rows[0] : null
+        };
+    } catch (err) {
+        console.error('Lỗi khi kiểm tra blacklist:', err);
+        throw err;
+    } finally {
+        connection.release();
+    }
+};
+
+module.exports = { 
+    getAllUsers, 
+    registerUser, 
+    loginUser, 
+    deleteUser, 
+    updateUser, 
+    countUsers, 
+    changePassword,
+    addToBlacklist,
+    removeFromBlacklist,
+    getBlacklist,
+    checkBlacklist
+};

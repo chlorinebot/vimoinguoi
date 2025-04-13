@@ -57,6 +57,36 @@
             .table td[title] {
                 cursor: pointer;
             }
+            
+            /* CSS cho avatar */
+            .avatar-circle {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                overflow: hidden;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #e9ecef;
+                margin-right: 10px;
+            }
+            
+            .avatar-circle img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            
+            .avatar-circle .avatar-text {
+                font-size: 16px;
+                font-weight: bold;
+                color: #495057;
+            }
+            
+            .user-dropdown {
+                display: flex;
+                align-items: center;
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -75,12 +105,21 @@
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <a class="nav-link dropdown-toggle user-dropdown" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="avatar-circle">
+                            <% if (user && user.avatar) { %>
+                                <img src="<%= user.avatar %>" alt="<%= user.username %>" />
+                            <% } else { %>
+                                <span class="avatar-text"><%= user.username.charAt(0).toUpperCase() %></span>
+                            <% } %>
+                        </div>
+                        <span class="d-none d-md-inline"><%= user.username %></span>
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Thông tin tài khoản</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi mật khẩu</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><button class="dropdown-item" id="logoutButton">Logout</button></li>
+                        <li><button class="dropdown-item" id="logoutButton">Đăng xuất</button></li>
                     </ul>
                 </li>
             </ul>
@@ -106,6 +145,10 @@
                             <a class="nav-link" href="#report-management" data-bs-toggle="tab">
                                 <div class="sb-nav-link-icon"><i class="fas fa-flag"></i></div>
                                 Quản Lý Báo Cáo
+                            </a>
+                            <a class="nav-link" href="#blacklist-management" data-bs-toggle="tab">
+                                <div class="sb-nav-link-icon"><i class="fas fa-ban"></i></div>
+                                Danh Sách Đen
                             </a>
                         </div>
                     </div>
@@ -249,6 +292,7 @@
                                                 <th>Mật Khẩu</th>
                                                 <th>Ngày Đăng Ký</th>
                                                 <th>Hành Động</th>
+                                                <th>Blacklist</th>
                                             </tr>
                                         </thead>
                                         <tbody id="userTableBody"></tbody>
@@ -320,6 +364,37 @@
                                 </div>
                                 <!-- Container cho Pagination -->
                                 <div id="reportPagination" class="d-flex justify-content-center mt-3"></div>
+                            </div>
+                            
+                            <!-- Quản Lý Danh Sách Đen -->
+                            <div class="tab-pane fade" id="blacklist-management">
+                                <h2>Quản Lý Danh Sách Đen</h2>
+                                <div class="search-container">
+                                    <input type="text" id="blacklistSearch" class="form-control" placeholder="Tìm kiếm người dùng trong danh sách đen...">
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#addBlacklistModal"><i class="bi bi-plus"></i> Thêm Vào Danh Sách Đen</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>ID Người Dùng</th>
+                                                <th>Tên Người Dùng</th>
+                                                <th>Email</th>
+                                                <th>Lý Do</th>
+                                                <th>Ngày Thêm Vào</th>
+                                                <th>Hành Động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="blacklistTableBody"></tbody>
+                                    </table>
+                                </div>
+                                <!-- Container cho Pagination -->
+                                <div id="blacklistPagination" class="d-flex justify-content-center mt-3"></div>
                             </div>
                         </div>
                     </div>
@@ -521,6 +596,106 @@
             </div>
         </div>
 
+        <!-- Modal Thông Tin Tài Khoản -->
+        <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="profileModalLabel">Thông Tin Tài Khoản</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="profileForm">
+                            <div class="text-center mb-4">
+                                <div class="avatar-upload position-relative mx-auto" style="width: 150px; height: 150px;">
+                                    <div class="avatar-circle" style="width: 150px; height: 150px;">
+                                        <% if (user && user.avatar) { %>
+                                            <img id="avatarPreview" src="<%= user.avatar %>" alt="<%= user.username %>" />
+                                        <% } else { %>
+                                            <span class="avatar-text" style="font-size: 48px;"><%= user.username.charAt(0).toUpperCase() %></span>
+                                        <% } %>
+                                    </div>
+                                    <div class="position-absolute bottom-0 end-0">
+                                        <label for="avatarUpload" class="btn btn-sm btn-primary rounded-circle">
+                                            <i class="bi bi-camera"></i>
+                                        </label>
+                                        <input type="file" id="avatarUpload" class="d-none" accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="profileUsername" class="form-label">Tên Tài Khoản</label>
+                                <input type="text" class="form-control" id="profileUsername" value="<%= user.username %>" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="profileEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="profileEmail" value="<%= user.email || '' %>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="profileRole" class="form-label">Vai Trò</label>
+                                <input type="text" class="form-control" id="profileRole" value="<%= user.role_id === 1 ? 'Admin' : 'Người dùng' %>" readonly>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="profileSubmitButton">Cập Nhật</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Đổi Mật Khẩu -->
+        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordModalLabel">Đổi Mật Khẩu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="changePasswordForm">
+                            <div class="mb-3">
+                                <label for="currentPassword" class="form-label">Mật Khẩu Hiện Tại</label>
+                                <input type="password" class="form-control" id="currentPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newPassword" class="form-label">Mật Khẩu Mới</label>
+                                <input type="password" class="form-control" id="newPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Xác Nhận Mật Khẩu Mới</label>
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="changePasswordSubmitButton">Đổi Mật Khẩu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Thêm Người Dùng Vào Danh Sách Đen -->
+        <div class="modal fade" id="addBlacklistModal" tabindex="-1" aria-labelledby="addBlacklistModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addBlacklistModalLabel">Thêm Người Dùng Vào Danh Sách Đen</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addBlacklistForm">
+                            <div class="mb-3">
+                                <label for="blacklistUserId" class="form-label">ID Người Dùng</label>
+                                <input type="number" class="form-control" id="blacklistUserId" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="blacklistReason" class="form-label">Lý Do</label>
+                                <textarea class="form-control" id="blacklistReason" rows="3" placeholder="Nhập lý do khóa tài khoản..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger" id="blacklistSubmitButton">Thêm Vào Danh Sách Đen</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal Xem Chi Tiết Báo Cáo -->
         <div class="modal fade" id="reportDetailModal" tabindex="-1" aria-labelledby="reportDetailModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -595,6 +770,8 @@
         <script type="module" src="/js/admin-web/genres.js"></script>
         <script type="module" src="/js/admin-web/dashboard.js"></script>
         <script type="module" src="/js/admin-web/reports.js"></script>
+        <script type="module" src="/js/admin-web/blacklist.js"></script>
+        <script type="module" src="/js/admin-web/profile.js"></script>
         <script src="/js/index/login.js"></script>
         <script>
             // Khai báo các biến toàn cục

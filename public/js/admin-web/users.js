@@ -1,4 +1,6 @@
 // users.js
+import { addToBlacklist } from './blacklist.js';
+
 let originalUsers = [];
 const ITEMS_PER_PAGE = 5; // Số lượng người dùng mỗi trang
 let currentPage = 1; // Trang hiện tại
@@ -58,6 +60,9 @@ export function renderUsers(users) {
                     <button class="btn btn-danger btn-sm delete-user-btn" data-id="${user.id}"><i class="bi bi-trash"></i> Xóa</button>
                     <button class="btn btn-warning btn-sm edit-user-btn" data-id="${user.id}"><i class="bi bi-pencil"></i> Sửa</button>
                 </td>
+                <td>
+                    <button class="btn btn-dark btn-sm add-to-blacklist-btn" data-id="${user.id}" data-username="${user.username}"><i class="bi bi-ban"></i> Khóa</button>
+                </td>
             </tr>
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
@@ -67,6 +72,21 @@ export function renderUsers(users) {
     renderPagination(paginationContainer, totalPages, currentPage, (page) => {
         currentPage = page;
         renderUsers(users);
+    });
+    
+    // Thêm sự kiện cho nút thêm vào blacklist
+    document.querySelectorAll('.add-to-blacklist-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const userId = e.currentTarget.dataset.id;
+            const username = e.currentTarget.dataset.username;
+            
+            // Hiển thị modal thêm vào blacklist
+            document.getElementById('blacklistUserId').value = userId;
+            document.getElementById('blacklistReason').value = `Khóa tài khoản của người dùng ${username}`;
+            
+            const modal = new bootstrap.Modal(document.getElementById('addBlacklistModal'));
+            modal.show();
+        });
     });
 }
 

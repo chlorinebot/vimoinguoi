@@ -1,4 +1,22 @@
 // public/js/index/logup.js
+
+// Thêm hàm showAlert
+function showAlert(title, text, icon = 'info') {
+    return Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        confirmButtonText: 'Đồng ý',
+        confirmButtonColor: '#28a745',
+        showCloseButton: true,
+        customClass: {
+            popup: 'swal-wide',
+            title: 'swal-title',
+            content: 'swal-text'
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('registerForm');
     const registerMessage = document.getElementById('registerMessage');
@@ -7,6 +25,84 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const registerButton = document.querySelector('#registerForm button[type="submit"]');
     const termsCheck = document.getElementById('termsCheck');
+    const usernameInput = document.getElementById('registerUsername');
+    const emailInput = document.getElementById('registerEmail');
+
+    // Thêm debounce function để tránh gọi API quá nhiều
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Kiểm tra username đã tồn tại
+    const checkUsernameExists = debounce(async (username) => {
+        try {
+            const response = await fetch(`/api/check-username/${username}`);
+            const data = await response.json();
+            if (data.exists) {
+                await showAlert(
+                    'Tên người dùng đã tồn tại',
+                    'Vui lòng chọn tên người dùng khác.',
+                    'warning'
+                );
+                usernameInput.classList.add('is-invalid');
+                return true;
+            }
+            usernameInput.classList.remove('is-invalid');
+            return false;
+        } catch (error) {
+            console.error('Lỗi kiểm tra tên người dùng:', error);
+            return false;
+        }
+    }, 500);
+
+    // Kiểm tra email đã tồn tại
+    const checkEmailExists = debounce(async (email) => {
+        try {
+            const response = await fetch(`/api/check-email/${email}`);
+            const data = await response.json();
+            if (data.exists) {
+                await showAlert(
+                    'Email đã tồn tại',
+                    'Vui lòng sử dụng email khác hoặc đăng nhập nếu đã có tài khoản.',
+                    'warning'
+                );
+                emailInput.classList.add('is-invalid');
+                return true;
+            }
+            emailInput.classList.remove('is-invalid');
+            return false;
+        } catch (error) {
+            console.error('Lỗi kiểm tra email:', error);
+            return false;
+        }
+    }, 500);
+
+    // Thêm sự kiện kiểm tra khi người dùng nhập
+    if (usernameInput) {
+        usernameInput.addEventListener('blur', () => {
+            const username = usernameInput.value;
+            if (username && validateUsername()) {
+                checkUsernameExists(username);
+            }
+        });
+    }
+
+    if (emailInput) {
+        emailInput.addEventListener('blur', () => {
+            const email = emailInput.value;
+            if (email && validateEmail()) {
+                checkEmailExists(email);
+            }
+        });
+    }
 
     if (registerForm) {
         // Hiển thị/ẩn mật khẩu
@@ -123,26 +219,36 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!termsCheck) {
                 document.querySelectorAll('.error-message')[4].textContent = 'Vui lòng đồng ý với điều khoản dịch vụ.';
                 document.querySelectorAll('.error-message')[4].classList.add('text-danger');
+                return;
             }
 
             if (!isUsernameValid || !isEmailValid || !isPasswordValid || !isConfirmPasswordValid || !termsCheck) {
                 return;
             }
 
+            // Kiểm tra username và email tồn tại trước khi đăng ký
+            const usernameExists = await checkUsernameExists(username);
+            const emailExists = await checkEmailExists(email);
+
+            if (usernameExists || emailExists) {
+                return;
+            }
+
             try {
-                // Sử dụng ApiService thay vì gọi fetch trực tiếp
                 const data = await ApiService.register({ username, email, password });
+                await showAlert('Đăng ký thành công', data.message, 'success');
                 
-                registerMessage.textContent = data.message;
-                registerMessage.className = 'mt-2 text-success';
                 setTimeout(() => {
                     const modal = bootstrap.Modal.getInstance(document.getElementById('logup'));
                     modal.hide();
-                    resetModalState(); // Gọi hàm reset modal state khi đóng modal
+                    resetModalState();
                 }, 1000);
             } catch (error) {
-                registerMessage.textContent = error.message || 'Lỗi đăng ký!';
-                registerMessage.className = 'mt-2 text-danger';
+                await showAlert(
+                    'Lỗi đăng ký',
+                    error.message || 'Có lỗi xảy ra khi đăng ký. Vui lòng thử lại!',
+                    'error'
+                );
                 console.error('Lỗi:', error);
             }
         });

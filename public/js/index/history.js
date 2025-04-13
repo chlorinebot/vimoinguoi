@@ -1,9 +1,18 @@
 // public/js/index/history.js
 document.addEventListener('DOMContentLoaded', () => {
-    // Xử lý sự kiện khi tab lịch sử đọc được chọn
-    const historyTab = document.getElementById('history-tab');
-    if (historyTab) {
-        historyTab.addEventListener('click', loadReadingHistory);
+    // Thêm listener cho sự kiện shown.bs.tab để tải lịch sử khi tab được hiển thị
+    const historyTabPane = document.getElementById('history-tab-pane');
+    if (historyTabPane) {
+        const profileModalElement = document.getElementById('userProfileModal');
+        if (profileModalElement) {
+            profileModalElement.addEventListener('shown.bs.tab', function (event) {
+                // Kiểm tra xem tab được hiển thị có phải là tab lịch sử không
+                if (event.target && event.target.id === 'history-tab') {
+                    console.log('Tab lịch sử được hiển thị, đang tải dữ liệu...');
+                    loadReadingHistory(); // Gọi hàm tải lịch sử
+                }
+            });
+        }
     }
 
     // Xử lý nút tìm kiếm lịch sử

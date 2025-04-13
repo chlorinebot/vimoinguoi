@@ -3,6 +3,8 @@ import { fetchComics, renderComics, deleteComic, editComic, searchComics } from 
 import { showChapters, renderChapters, deleteChapter, editChapter, searchChapters } from './chapters.js';
 import { fetchUsers, renderUsers, deleteUser, editUser, searchUsers } from './users.js';
 import { fetchGenres, renderGenres, deleteGenre, editGenre, searchGenres } from './genres.js';
+import { fetchBlacklist, searchBlacklist, initBlacklistEvents } from './blacklist.js';
+import { initProfileEvents, initChangePasswordEvents, initAvatarUpload } from './profile.js';
 
 // Khởi tạo khi DOM được tải
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchComics();
     fetchUsers();
     fetchGenres();
+    fetchBlacklist();
+    initBlacklistEvents();
+    
+    // Khởi tạo các chức năng quản lý tài khoản
+    initProfileEvents();
+    initChangePasswordEvents();
+    initAvatarUpload();
 
     // Xử lý sự kiện chuyển tab
     const tabLinks = document.querySelectorAll('.nav-link');

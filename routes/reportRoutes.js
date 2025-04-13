@@ -9,8 +9,8 @@ const { checkAdminAuth, verifyToken } = require('../middleware/authMiddleware');
 router.post('/', checkDbConnection, submitReport);
 
 // Routes quản lý báo cáo (chỉ admin mới có quyền truy cập)
-router.get('/', [checkDbConnection, checkAdminAuth], getReports);
-router.put('/:reportId/status', [checkDbConnection, checkAdminAuth], updateReportStatus);
-router.delete('/:reportId', [checkDbConnection, checkAdminAuth], deleteReport);
+router.get('/', checkDbConnection, checkAdminAuth, getReports);
+router.put('/:id/status', checkDbConnection, checkAdminAuth, updateReportStatus);
+router.delete('/:id', checkDbConnection, checkAdminAuth, deleteReport);
 
 module.exports = router; 

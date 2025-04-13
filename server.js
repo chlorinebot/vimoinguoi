@@ -2,7 +2,7 @@ const express = require('express');
 const { dbPool, checkDbConnection, initializeDb } = require('./data/dbConfig');
 const { getCards, saveCardData, deleteCardData, updateCard, countCards } = require('./controllers/cardController');
 const { getChapters, saveChapterData, deleteChapterData, countChapters } = require('./controllers/chapterController');
-const { getUsers, deleteUserData, updateUser: updateUserData, countUsers } = require('./controllers/userController');
+const { getUsers, deleteUserData, updateUser: updateUserData, countUsers, getUserStats, addUserToBlacklist, removeUserFromBlacklist, getBlacklistUsers, checkUserBlacklist } = require('./controllers/userController');
 const { register, login } = require('./controllers/authController');
 const { getGenres, createGenre, updateGenre, deleteGenre, getCardGenres, updateCardGenres, countGenres } = require('./controllers/genreController');
 const { checkFavoriteStatus, addToFavorites, removeFromFavorites } = require('./controllers/favoriteController');
@@ -14,6 +14,7 @@ const reportRoutes = require('./routes/reportRoutes');
 const rankingRoutes = require('./routes/rankingRoutes');
 const { addComment, getComments, updateComment, deleteComment, getCommentReplies, addCommentReply } = require('./controllers/commentController');
 const jwt = require('jsonwebtoken');
+const userRoutes = require('./routes/userRoutes'); 
 // Cố gắng import cookie-parser nếu đã cài đặt, nếu không thì xử lý thủ công
 let cookieParser;
 try {
@@ -38,6 +39,9 @@ if (cookieParser) {
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
+// Sử dụng các route cho user
+app.use('/api', userRoutes);
+
 // Sử dụng routes từ file api.js
 app.use('/api', apiRoutes);
 
@@ -46,6 +50,9 @@ app.use('/report', reportRoutes);
 
 // Sử dụng routes cho bảng xếp hạng
 app.use('/api/rankings', rankingRoutes);
+
+// API cho thống kê người dùng
+app.get('/api/users/:userId/stats', verifyToken, getUserStats);
 
 // Middleware xử lý lỗi chung
 app.use((err, req, res, next) => {
@@ -74,9 +81,15 @@ app.get('/api/chapters', checkDbConnection, getChapters);
 app.post('/api/chapters', checkDbConnection, saveChapterData);
 app.delete('/api/chapters', checkDbConnection, deleteChapterData);
 
-// API cho users
-app.get('/api/users', checkDbConnection, getUsers);
-app.delete('/api/users/:id', checkDbConnection, deleteUserData);
+// API cho users (BẢO VỆ BẰNG checkAdminAuth)
+app.get('/api/users', checkDbConnection, checkAdminAuth, getUsers);
+app.delete('/api/users/:id', checkDbConnection, checkAdminAuth, deleteUserData);
+
+// API cho blacklist (BẢO VỆ BẰNG checkAdminAuth)
+app.get('/api/blacklist', checkDbConnection, checkAdminAuth, getBlacklistUsers);
+app.post('/api/blacklist', checkDbConnection, checkAdminAuth, addUserToBlacklist);
+app.delete('/api/blacklist/:userId', checkDbConnection, checkAdminAuth, removeUserFromBlacklist);
+app.get('/api/blacklist/:userId', checkDbConnection, checkAdminAuth, checkUserBlacklist);
 
 // API đổi mật khẩu người dùng (phải đặt trước route động /api/users/:id)
 app.put('/api/users/change-password', [checkDbConnection, verifyToken], async (req, res) => {
@@ -106,11 +119,11 @@ app.put('/api/users/change-password', [checkDbConnection, verifyToken], async (r
 // API cập nhật thông tin người dùng
 app.put('/api/users/:id', checkDbConnection, updateUserData);
 
-// API cho genres
-app.get('/api/genres', checkDbConnection, getGenres);
-app.post('/api/genres', checkDbConnection, createGenre);
-app.put('/api/genres/:id', checkDbConnection, updateGenre);
-app.delete('/api/genres/:id', checkDbConnection, deleteGenre);
+// API cho genres (BẢO VỆ BẰNG checkAdminAuth)
+app.get('/api/genres', checkDbConnection, checkAdminAuth, getGenres);
+app.post('/api/genres', checkDbConnection, checkAdminAuth, createGenre);
+app.put('/api/genres/:id', checkDbConnection, checkAdminAuth, updateGenre);
+app.delete('/api/genres/:id', checkDbConnection, checkAdminAuth, deleteGenre);
 
 // API cho favorites
 app.get('/api/favorites/:userId/:cardId', checkDbConnection, checkFavoriteStatus);
@@ -140,8 +153,31 @@ app.get('/api/comments/:commentId/replies', checkDbConnection, getCommentReplies
 app.post('/api/comments/:commentId/replies', checkDbConnection, verifyToken, addCommentReply);
 
 // Route admin
-app.get('/admin-web', checkDbConnection, checkAdminAuth, (req, res) => {
-    res.render('admin-web', { user: req.user });
+app.get('/admin-web', checkDbConnection, checkAdminAuth, async (req, res) => {
+    try {
+        // Lấy thông tin đầy đủ của người dùng từ database
+        const connection = await dbPool.getConnection();
+        try {
+            const [rows] = await connection.query(
+                'SELECT id, username, email, avatar, role_id FROM users WHERE id = ?',
+                [req.user.id || req.user.userId]
+            );
+            
+            if (rows.length === 0) {
+                return res.status(404).render('401', { error: 'Không tìm thấy thông tin người dùng' });
+            }
+            
+            const user = rows[0];
+            console.log('Thông tin người dùng từ database:', user);
+            
+            res.render('admin-web', { user: user });
+        } finally {
+            connection.release();
+        }
+    } catch (error) {
+        console.error('Lỗi khi lấy thông tin người dùng:', error);
+        res.status(500).render('401', { error: 'Lỗi khi lấy thông tin người dùng' });
+    }
 });
 
 // Route cho trang lỗi

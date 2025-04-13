@@ -1,4 +1,5 @@
 const { dbPool } = require('../data/dbConfig');
+const { checkBlacklist } = require('../service/userService');
 
 // Thêm bình luận mới
 const addComment = async (req, res) => {
@@ -6,6 +7,21 @@ const addComment = async (req, res) => {
     
     if (!user_id || !chapter_id || !content) {
         return res.status(400).json({ error: 'Thiếu thông tin cần thiết' });
+    }
+    
+    // Kiểm tra xem người dùng có trong danh sách đen không
+    try {
+        const blacklistStatus = await checkBlacklist(user_id);
+        if (blacklistStatus.isBlacklisted) {
+            return res.status(403).json({ 
+                error: 'Tài khoản của bạn đã bị khóa và không thể bình luận', 
+                reason: blacklistStatus.blacklistInfo.reason,
+                blacklisted: true
+            });
+        }
+    } catch (err) {
+        console.error('Lỗi khi kiểm tra blacklist:', err);
+        // Tiếp tục xử lý nếu có lỗi khi kiểm tra blacklist
     }
 
     const connection = await dbPool.getConnection();
@@ -186,6 +202,21 @@ const addCommentReply = async (req, res) => {
 
     if (!user_id || !content) {
         return res.status(400).json({ error: 'Thiếu thông tin cần thiết' });
+    }
+    
+    // Kiểm tra xem người dùng có trong danh sách đen không
+    try {
+        const blacklistStatus = await checkBlacklist(user_id);
+        if (blacklistStatus.isBlacklisted) {
+            return res.status(403).json({ 
+                error: 'Tài khoản của bạn đã bị khóa và không thể trả lời bình luận', 
+                reason: blacklistStatus.blacklistInfo.reason,
+                blacklisted: true
+            });
+        }
+    } catch (err) {
+        console.error('Lỗi khi kiểm tra blacklist:', err);
+        // Tiếp tục xử lý nếu có lỗi khi kiểm tra blacklist
     }
 
     const connection = await dbPool.getConnection();
